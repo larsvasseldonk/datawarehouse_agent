@@ -1,21 +1,26 @@
-# Relational RAG: Natural-Language Interface for DuckDB
+# Data Assistant Agent: Natural-Language Query Interface for Relational Data Warehouses
 
-A CLI tool that lets business users query a local DuckDB database in plain English — with inspectable, trustworthy results.
+A data assitant that allows users to query a relational data warehouse using both natural language and reusable command shortcuts.
 
 ## The Problem
 
-With so many dashboards available, business users often struggle to find the right information quickly. Existing natural-language-to-SQL systems are unreliable and hard to trust, leaving users uncertain whether the generated query is correct.
+Business users cannot easily retrieve data from a complex data warehouse without relying on data engineers, due to the need for SQL and fragmented reporting tools. Data engineers spend significant time repeatedly answering similar questions and manually querying data, leading to inefficiency. There is no simple, trusted interface where users can quickly access validated data insights or reuse common queries.
 
 ## What It Does
 
-The user types a question in natural language (e.g. *"What were the top 5 products by revenue last quarter?"*). The system:
+The system processes user messages via WhatsApp, either as natural language queries or predefined commands (e.g., /today, /revenue).
 
-1. Retrieves relevant schema fragments and similar past queries using RAG.
-2. Generates SQL with an LLM, grounded in that retrieved context.
-3. Executes the SQL against a local DuckDB database.
-4. Returns the query results, the generated SQL, a short plain-English explanation, and basic trust indicators (similar past queries, tables used).
+### Input
+User messages via WhatsApp, either as natural language queries or predefined commands (e.g., /today, /revenue).
 
-The success metric is higher accuracy on a small benchmark of business questions compared to a no-retrieval baseline, plus consistent and inspectable outputs that help users understand and trust the answers.
+### Processing
+Classify user intent; retrieve relevant schema and similar past queries from a query memory system; generate and validate SQL using retrieval-augmented generation; execute queries in DuckDB; and compute trust signals based on similarity to previously validated queries.
+
+### Output
+Concise answers delivered in WhatsApp, including results, explanations, SQL traces, and trust indicators (e.g., similar queries, tables used).
+
+### Success Metric
+Reduction in repeated manual queries and improved user trust, measured by reuse of shortcuts and accuracy on predefined business questions.
 
 ## Setup
 
