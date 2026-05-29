@@ -221,4 +221,5 @@ def run(agent):
 if __name__ == "__main__":
 
     agent = create_agent(SQLAgentConfig(), SQLTools(), LLMProvider())
-    run(agent)
+    with logfire.span('user_session'):
+        run(agent)
