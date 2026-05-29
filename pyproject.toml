@@ -6,8 +6,16 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "duckdb>=1.5.2",
-    "jupyter>=1.0.0",
+    "jaxn>=0.0.5",
     "minsearch>=0.0.5",
     "openai>=1.50.0",
+    "pydantic-ai>=1.104.0",
+    "pytest>=9.0.3",
+    "pytest-asyncio>=1.4.0",
     "python-dotenv>=1.0.0",
+]
+[dependency-groups]
+dev = [
+    "ipykernel>=7.2.0",
+    "pre-commit>=4.6.0",
 ]
