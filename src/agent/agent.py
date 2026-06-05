@@ -60,6 +60,10 @@ IMPORTANT:
 - If the answer cannot be found in the database, clearly communicate this to the user instead of trying to fabricate an answer.
 - Always validate user inputs.
 - Strictly follow the SQL conventions and rules stated below.
+- Always ask for the date range to filter the data when querying fact tables.
+- Always check in the metadata if the relevant tables contain data for the specified date range before running SQL queries.
+- If there is no data about the specified date range, inform the user.
+- Always ask for the location (station name or region) to filter the data when querying fact tables that contain location-specific data.
 
 Additional notes:
 - Always use exact matches for station names in SQL queries. Use the search_station_name() tool to validate station names before including them in SQL queries.
@@ -116,8 +120,8 @@ class RAGResponse(BaseModel):
     found_answer: bool = Field(description="True if relevant information was found in the database, False otherwise")
     query_specs: QuerySpecs = Field(description="Specifications of the SQL query used to generate the answer")
     sql_query: str = Field(description="The SQL query that was run")
-    confidence: float = Field(description="Confidence score from 0.0 to 1.0 indicating how certain the answer is")
-    confidence_explanation: str = Field(description="Explanation about the confidence level")
+    confidence_explanation: str = Field(description="Explanation about the confidence level indicating how certain the agent is about answering the user's question based on the data in the database")
+    confidence: float = Field(description="Confidence score from 0.0 to 1.0, where 0.0 indicating that the answer is not found in the database and 1.0 indicating that the answer is fully supported by the data in the database")
 
 
 class AgentStreamRunner:
@@ -185,8 +189,6 @@ def create_agent(
     tools = [
         sql_tools.get_db_metadata,
         sql_tools.get_example_queries,
-        sql_tools.get_date_range,
-        sql_tools.search_station_name,
         sql_tools.run_sql,
     ]
     model = model_provider.get_chatns_model()

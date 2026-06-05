@@ -134,6 +134,12 @@ class SQLTools:
                     }
                 )
 
+        # Add date ranges for fact tables with a dimdatumkey column
+        for table in db_metadata.values():
+            if table["type"] == "fact" and any("dimdatumkey" in col["name"] for col in table["columns"]):
+                date_range_str = self._get_date_range(table["name"])
+                table["date_range"] = date_range_str
+
         # Cache the metadata to a JSON file for future use
         with open(cache_file, "w") as f:
             json.dump(db_metadata, f, indent=4)
@@ -180,7 +186,7 @@ class SQLTools:
         }
     
 
-    def get_date_range(self, fact_table_name: str) -> str:
+    def _get_date_range(self, fact_table_name: str) -> str:
         """
         Retrieves the date range for the given fact table.
 
