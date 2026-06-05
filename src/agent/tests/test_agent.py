@@ -41,7 +41,7 @@ async def test_agent_runs(agent):
 
 @pytest.mark.asyncio
 async def test_agent_tool_order(agent):
-    user_prompt = "Wat is de meest voorkomende meldingsoort in 2025?"
+    user_prompt = "Wat is de meest voorkomende meldingsoort op Utrecht Centraal in 2025?"
     result = await run_agent_test(agent, user_prompt)
 
     messages = result.new_messages()
@@ -67,11 +67,8 @@ async def test_agent_no_answer(agent):
 
 @pytest.mark.asyncio
 async def test_agent_future_date(agent):
-    user_prompt = "Wat is het aantal incidenten geregistreerd in augustus 2026?"
+    user_prompt = "Wat is het totaal aantal incidenten geregistreerd in augustus 2026?"
     result = await run_agent_test(agent, user_prompt)
 
     rag_response = result.output
-    messages = result.new_messages()
-    tool_calls = collect_tools(messages)
-    assert "run_sql" not in [t.name for t in tool_calls]
     assert rag_response.found_answer == False

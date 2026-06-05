@@ -36,7 +36,6 @@ def get_model_name(agent):
     return f'{provider}:{model_name}'
 
 
-
 async def run_agent_test(agent, user_prompt, message_history=None):
     runner = AgentStreamRunner(agent, JSONParserHandler())
     result = await runner.run(user_prompt, message_history)
