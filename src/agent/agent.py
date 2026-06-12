@@ -1,81 +1,97 @@
+from typing import Any, Dict
 from dataclasses import dataclass
 
-from pydantic import BaseModel, Field
-from pydantic_ai import Agent, AgentRun
+from pydantic_ai import Agent, AgentRun, AgentRunResult
 from pydantic_ai.messages import FunctionToolCallEvent
 from pydantic_ai._agent_graph import UserPromptNode, ModelRequestNode, CallToolsNode
 
 from jaxn import JSONParserHandler, StreamingJSONParser
 
 from src.agent.llm import LLMProvider
+from src.agent.models import RAGResponse
 from src.agent.tools import SQLTools
-from src.agent.utils import print_messages, print_result
+
+AgentResponse = RAGResponse | str
 
 from dotenv import load_dotenv
 import logfire
 
 load_dotenv()
 
-logfire.configure(send_to_logfire="if-token-present")
+logfire.configure(send_to_logfire="if-token-present", console=False)
 logfire.instrument_pydantic_ai()
 
 
 DEFAULT_INSTRUCTIONS = """
-You are a SQL assistant.
+# Role & Objective
+You are an expert Data Assistant Agent specializing in translating natural language questions regarding social safety incident reports into precise, highly accurate SQL queries. 
 
-Answer the user question using only data available in the database.
+Because you are dealing with sensitive safety reporting data, correctness is paramount. You must strictly guide the user through a three-phase pipeline: 
+1. Feasibility Check
+2. Interactive Refinement (populating `QuerySpecs`)
+3. SQL Generation, Execution, & Evaluation (instantiating `RAGResponse`)
 
-Your user is a data analyst who wants to retrieve insights from the 
-database by asking natural language questions. Your task is to translate 
-these natural language questions into SQL queries that can be executed 
-against the database. 
+---
 
-Make sure to follow the steps and conventions outlined below to ensure 
-your SQL queries are accurate and effective.
+## Phase 1: Feasibility Check
+Upon receiving a user query, immediately evaluate if the question can be answered using the available database schema and metadata.
 
-Make 3 iterations:
+* **Action:** Inspect the database metadata (tables, columns, descriptions).
+* **Outcome A (Unfeasible):** If the required data does not exist in the metadata, politely inform the user that the question cannot be answered with the current data, explain *why* briefly, and halt execution.
+* **Outcome B (Feasible):** If the question can potentially be answered, silently transition to **Phase 2**.
 
-1) First iteration:
-    - Retrieve the database metadata using get_db_metadata() to understand the schema, including the available tables, their columns, and data types.
+---
 
-2) Second iteration:
-    - Analyze the metadata and refine the user's question:
-        - If the user's question is too broad or ambiguous, ask for clarification.
-        - If the question cannot be answered with the available data, inform the user that the information is not available in the database.
-    - Validate search terms:
-        - Validate time period with get_date_range() tool if the question involves time-based data.
-        - Validate station name with search_station_name() tool if the question involves station-specific data.
-    - If the question is clear and can be answered with the available data, get example SQL queries
-    - Construct SQL query following the SQL conventions and rules, ensuring to join fact and dimension tables as needed to produce meaningful results. Use the example queries as a guide for structuring your SQL query.
-    - Run the SQL query using run_sql() and analyze the results.
+## Phase 2: Interactive Refinement Phase
+Your objective in this phase is to completely and accurately populate the `QuerySpecs` data structure. You must interact with the user to gather, clarify, and validate this information before any SQL code is drafted.
 
-3) Third iteration:
-    - Review the results of the SQL query and ensure they answer the user's question accurately.
-    - If query fails, analyze the error message, correct the query, and try running it again. Make at least three attempts to fix and rerun the query if it fails.
-    - Synthesize the final answer to the user's question based on the query results and return it in a clear and concise manner.
+* **Target Schema to Populate:** `QuerySpecs` (including `LocationSpecs` and `QueryFilter`).
+* **Behavior Rules:**
+    * Ask targeted follow-up questions to fill missing mandatory fields (like dates).
+    * **Handling Location Constraints:** Disambiguate where the incident took place. Explicitly separate points (stations), trajectories (train numbers), and polygons (regions).
+    * Present questions clearly with structured input suggestions and concrete examples:
+        * *Station Example:* "Which station? (e.g., 'Amsterdam Centraal' or 'Utrecht Centraal')"
+        * *Train Example:* "Which train number or series? (e.g., '4000')"
+        * *Region Example:* "Which operational region? (e.g., 'Noord-Oost' or 'Randstad Zuid')"
+    * **Handling Optional Fields:** For optional parameters (like non-spatial `filters`), you *must* explicitly check with the user if they want to apply them before proceeding.
+* **Exit Condition:** Do not leave this phase until all mandatory `QuerySpecs` fields are filled and optional fields have been explicitly confirmed or declined by the user.
+* **Clarification rule:** If mandatory information is still missing, return a plain-text clarification question (a simple string). Do NOT return a `RAGResponse`. Ask exactly one question that unblocks the next step.
 
-IMPORTANT:
-- Use only information from the database to answer the user's question.
-- Do not make assumptions or use external knowledge.
-- If the answer cannot be found in the database, clearly communicate this to the user instead of trying to fabricate an answer.
-- Always validate user inputs.
-- Strictly follow the SQL conventions and rules stated below.
-- Always ask for the date range to filter the data when querying fact tables.
-- Always check in the metadata if the relevant tables contain data for the specified date range before running SQL queries.
-- If there is no data about the specified date range, inform the user.
-- Always ask for the location (station name or region) to filter the data when querying fact tables that contain location-specific data.
+---
 
-Additional notes:
-- Always use exact matches for station names in SQL queries. Use the search_station_name() tool to validate station names before including them in SQL queries.
-- Never use wildcards in SQL queries, as this can lead to inaccurate results. 
-- Never use LIKE or ILIKE operators in SQL queries.
+## Phase 3: SQL Generation, Execution & Evaluation
+Once the `QuerySpecs` object is fully populated, transition to execution and build the final `RAGResponse`.
 
-Code formatting rules (you MUST follow these when constructing SQL queries):
-- Uppercase for SQL keywords (e.g., 'SELECT', 'FROM', 'WHERE', 'SUM')
-- Lowercase table and column names
-- Use CTEs (Common Table Expressions) for complex queries to break them into manageable parts
-- Use meaningful aliases for tables and columns
-- Comment your queries to explain complex logic or business rules
+1. **Few-Shot Knowledge Retrieval:**
+    * Fetch relevant example SQL queries from the knowledge base to ensure correct join structures and business logic mapping.
+    * *Constraint:* You are allowed to perform this retrieval step exactly **once (max 1 time)** per session.
+2. **SQL Generation & Execution:**
+    * Map the `QuerySpecs` strictly to the database columns. 
+    * If `location.train_numbers` is populated, filter by the specific train series column. If `location.regions` is populated, perform the proper dimension join for regional filtering.
+    * Convert periods to strict `YYYY-MM-DD` date structures.
+    * Execute the query safely against the database to retrieve the raw results and the exact `row_count`.
+3. **Confidence Score Assessment:**
+    * Evaluate the generated SQL code for **technical correctness** (syntax, join predicates) and **functional correctness** (does the logic strictly match the user's safety query?).
+    * Deduct points if schemas were ambiguous or if complex business logic assumptions had to be made.
+
+---
+
+## Final Output Structure
+You must return your final output matching the schema of the `RAGResponse` model:
+
+* **answer:** Natural language summary of the data. If 0 rows are returned, explicitly state that no incidents matched the criteria.
+* **query_executed_successfully:** True if the SQL query ran without errors (even if 0 rows returned). False if a DB error occurred.
+* **row_count:** The exact number of rows returned by the SQL execution.
+* **query_specs:** The finalized `QuerySpecs` object used for the run.
+* **sql_query:** The exact, clean SQL code executed.
+* **confidence:** Score from 0.0 to 1.0.
+* **confidence_explanation:** Technical and functional justification for the score.
+* **followup_questions:** 2-3 proactive, highly relevant follow-up questions that are *completely answerable* using the available database metadata.
+
+Tool discipline:
+* Call `get_db_metadata()` at most once per session.
+* If `get_db_metadata()` has already been called, reuse the earlier metadata. Do NOT call it again.
+* Do not loop on metadata retrieval when user clarification is the real blocker.
 """.strip()
 
 
@@ -85,43 +101,18 @@ class SQLAgentConfig:
     instructions: str = DEFAULT_INSTRUCTIONS
 
 
-class QuerySpecs(BaseModel):
-    """
-    This model captures the specifications for a SQL query that the agent
-    intends to run, including the target fact table, any relevant dimension
-    tables, and the time period for which to query the data.
-    """
+class RAGResponseHandler(JSONParserHandler):
+    def on_value_chunk(self, path: str, field_name: str, chunk: str) -> None:
+        if path == '' and field_name == 'answer':
+            print(chunk, end='', flush=True)
 
-    fact_table: list[str] = Field(description="A list of fact tables to query")
-    dimension_tables: list[str] = Field(
-        description="A list of dimension tables to join with the fact table"
-    )
-    from_period: str = Field(
-        description="The start of the time period to filter the data (e.g., '2025', '2025-01', '2025-01-01')"
-    )
-    to_period: str = Field(
-        description="The end of the time period to filter the data (e.g., '2025', '2025-01', '2025-01-01')"
-    )
-    stations: list[str] = Field(description="The stations (dienstregelpuntnaam) to filter the data, if applicable")
-    filters: dict = Field(
-        description="Filters to apply to the query, represented as a dictionary of column names and their corresponding filter values"
-    )
+    def on_field_end(self, path: str, field_name: str, value: str, parsed_value: Any = None) -> None:
+        if path == '' and field_name == 'sql_query':
+            print('sql query:', value)
 
-
-class RAGResponse(BaseModel):
-    """
-    This model provides a structured representation of the results returned
-    by the SQL agent, including the original SQL query, a text representation
-    of the results, the number of rows returned, and the agent's confidence
-    level in the correctness of the results.
-    """
-
-    answer: str = Field(description="The main answer to the user's question in text form")
-    found_answer: bool = Field(description="True if relevant information was found in the database, False otherwise")
-    query_specs: QuerySpecs = Field(description="Specifications of the SQL query used to generate the answer")
-    sql_query: str = Field(description="The SQL query that was run")
-    confidence_explanation: str = Field(description="Explanation about the confidence level indicating how certain the agent is about answering the user's question based on the data in the database")
-    confidence: float = Field(description="Confidence score from 0.0 to 1.0, where 0.0 indicating that the answer is not found in the database and 1.0 indicating that the answer is fully supported by the data in the database")
+    def on_array_item_end(self, path: str, field_name: str, item: Dict[str, Any] = None) -> None:
+        if field_name == 'followup_questions':
+            print('follow up question:', item)
 
 
 class AgentStreamRunner:
@@ -158,7 +149,7 @@ class AgentStreamRunner:
         parser = StreamingJSONParser(self.handler)
 
         async with node.stream(agent_run.ctx) as stream:
-            async for response in stream.stream_responses():
+            async for response in stream.stream_response():
                 for part in response.parts:
                     if part.part_kind != 'tool-call':
                         continue
@@ -186,8 +177,21 @@ def create_agent(
     config: SQLAgentConfig, sql_tools: SQLTools, model_provider: LLMProvider
 ) -> Agent:
 
+    metadata_cache: dict | None = None
+
+    def get_db_metadata() -> dict:
+        """Retrieves database schema metadata. May only be called once per session."""
+        nonlocal metadata_cache
+        if metadata_cache is None:
+            metadata_cache = sql_tools.get_db_metadata()
+            return metadata_cache
+        return {
+            "already_loaded": True,
+            "message": "Metadata already retrieved. Reuse it and proceed to the next phase.",
+        }
+
     tools = [
-        sql_tools.get_db_metadata,
+        get_db_metadata,
         sql_tools.get_example_queries,
         sql_tools.run_sql,
     ]
@@ -203,25 +207,99 @@ def create_agent(
     return sql_agent
 
 
-def run(agent):
-    message_history = []
+class NamedCallback:
 
-    while True:
-        prompt = input("You (write 'stop' to stop): ")
-        if not prompt or prompt.lower().strip() == "stop":
-            break
+    def __init__(self, agent):
+        self.agent_name = agent.name
 
-        result = agent.run_sync(
-            prompt, message_history=message_history, output_type=RAGResponse
-        )
+    async def print_function_calls(self, ctx, event):
+        # Detect nested streams
+        if hasattr(event, "__aiter__"):
+            async for sub in event:
+                await self.print_function_calls(ctx, sub)
+            return
 
-        print_messages(result.all_messages())
-        print_result(result.output)
-        message_history = result.all_messages()
+        if isinstance(event, FunctionToolCallEvent):
+            tool_name = event.part.tool_name
+            args = event.part.args
+            print(f"TOOL CALL ({self.agent_name}): {tool_name}({args})")
+
+    async def __call__(self, ctx, event):
+        return await self.print_function_calls(ctx, event)
+    
+
+async def print_stream_node(node: ModelRequestNode, agent_run: AgentRun):
+    args_so_far = ""
+
+    parser = StreamingJSONParser(RAGResponseHandler())
+
+    async with node.stream(agent_run.ctx) as stream:
+        async for response in stream.stream_response():
+            for part in response.parts:
+                if part.part_kind != 'tool-call':
+                    continue
+                if part.tool_name != 'final_result':
+                    continue
+
+                args_new = part.args
+                args_new_chunk = args_new[len(args_so_far):]
+                args_so_far = args_new
+
+                parser.parse_incremental(args_new_chunk)
+
+    print()
 
 
-if __name__ == "__main__":
+async def print_tool_calls(node: CallToolsNode, agent_run: AgentRun, agent_name: str):
+    async with node.stream(agent_run.ctx) as events:
+        async for event in events:
+            if isinstance(event, FunctionToolCallEvent):
+                tool_name = event.part.tool_name
+                args = event.part.args
+                print(f"TOOL CALL ({agent_name}): {tool_name}({args})")
 
-    agent = create_agent(SQLAgentConfig(), SQLTools(), LLMProvider())
-    with logfire.span('user_session'):
-        run(agent)
+    
+
+async def run_agent(
+        agent: Agent,
+        user_prompt: str,
+        message_history=None
+    ) -> AgentRunResult:
+    callback = NamedCallback(agent)
+
+    if message_history is None:
+        message_history = []
+
+    result = await agent.run(
+        user_prompt,
+        event_stream_handler=callback,
+        message_history=message_history,
+        output_type=RAGResponse
+    )
+
+    return result
+
+
+async def run_agent_stream(
+        agent: Agent,
+        user_prompt: str,
+        message_history=None
+    ):
+
+    if message_history is None:
+        message_history = []
+
+    async with agent.iter(
+        user_prompt,
+        message_history=message_history,
+        output_type=AgentResponse
+    ) as agent_run:
+        async for node in agent_run:
+            if Agent.is_user_prompt_node(node):
+                print(f"USER PROMPT ({agent.name}): {node.user_prompt}")
+            elif Agent.is_model_request_node(node):
+                await print_stream_node(node, agent_run)
+            elif Agent.is_call_tools_node(node):
+                await print_tool_calls(node, agent_run, agent.name)
+
+        return agent_run.result

@@ -25,7 +25,22 @@ The agent follows these steps to answer a user question:
 5. The agent evaluates the results for correctness and confidence. If the confidence is low, it includes a warning in the response.
 6. The agent returns the answer along with confidence and rationale, including referenced tables and generated SQL for traceability.
 
+### Test Scenarios
 
+Test scenario 1:
+- If there is no data available for the questions, the agent should not run any SQL and tell the user that it cannot answer the question with the current data, and suggest alternative questions or ask for clarification.
+
+Test scenario 2:
+Tool call order: 1. get_db_metadata, 2. get_example_queries, 3. run_sql
+
+Test scenario 3:
+- output should include confidence indicators and rationale for the answer
+
+Think about:
+What output do you expect from the agent?
+Which tools should be called and in what order?
+What parameters are passed to the tools?
+Are there scenarios where the agent doesn't behave as expected?
 
 
 ## Product Scope

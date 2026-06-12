@@ -10,7 +10,7 @@ class LLMProvider:
     Provides methods to create and configure language models for the agent.
     """
 
-    def __init__(self, model_name: str = "gpt-4.1-mini"):
+    def __init__(self, model_name: str = "gpt-5-mini"):
         self.model_name = model_name
 
     def get_chatns_model(self):
