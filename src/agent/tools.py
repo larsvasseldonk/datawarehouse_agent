@@ -259,3 +259,30 @@ class SQLTools:
 
         except Exception as e:
             return f"Error while executing SQL query '{query}': {e}"
+
+
+    def run_sql_structured(self, query: str) -> Dict[str, Any]:
+        """
+        Executes a SQL query and returns a structured payload that includes
+        execution status, row_count, column names, and row data.
+        """
+
+        try:
+            cursor = self.con.execute(query)
+            rows = cursor.fetchall()
+            columns = [col[0] for col in cursor.description]
+
+            return {
+                "success": True,
+                "row_count": len(rows),
+                "columns": columns,
+                "rows": rows,
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "row_count": 0,
+                "columns": [],
+                "rows": [],
+                "error": str(e),
+            }
