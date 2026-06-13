@@ -10,7 +10,7 @@ class LLMProvider:
     Provides methods to create and configure language models for the agent.
     """
 
-    def __init__(self, model_name: str = "gpt-5-mini"):
+    def __init__(self, model_name: str = "gpt-4o-mini"):
         self.model_name = model_name
 
     def get_chatns_model(self):
@@ -30,7 +30,7 @@ class LLMProvider:
         # wordt niet verstuurd. Daarom `api_key="not-used"` als placeholder om deze
         # validatie te omzeilen.
         model = OpenAIChatModel(
-            self.model_name,
+            model_name=self.model_name,
             provider=OpenAIProvider(
                 openai_client=AsyncOpenAI(
                     api_key="not-used",
@@ -53,11 +53,11 @@ class LLMProvider:
             )
 
         model = OpenAIChatModel(
-            self.model_name,
+            model_name=self.model_name,
             provider=OpenAIProvider(
                 openai_client=AsyncOpenAI(
+                    api_key=api_key,
                     base_url="https://api.openai.com/v1",
-                    default_headers={"Authorization": f"Bearer {api_key}"},
                 ),
             ),
         )

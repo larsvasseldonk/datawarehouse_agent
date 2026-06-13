@@ -8,7 +8,7 @@ from src.agent.tools import SQLTools
 
 db_tools = SQLTools()
 model_provider = LLMProvider()
-model = model_provider.get_chatns_model()
+model = model_provider.get_openai_model()
 
 
 DEFAULT_INSTRUCTIONS = """
@@ -19,18 +19,23 @@ Your only job is to refine the user question into a structured handoff payload.
 ## Output contract
 Always return a `RefinementResponse` object.
 
-If clarification is needed:
+**CRITICAL: The date_range (from_date and to_date) MUST be known before setting ready_for_sql=true.**
+
+If clarification is needed (including missing dates):
 - `ready_for_sql` = false
-- ask exactly one concise follow-up in `clarification_question`
+- ask exactly one concise follow-up in `clarification_question` to get the missing date(s)
+- fill `date_range` with whatever dates you know, or ask for both if none are provided
 - still fill `refined_question` and `query_specs` with the best-known values so far
 
-If ready for SQL handoff:
+If ready for SQL handoff (ONLY when date_range is complete):
 - `ready_for_sql` = true
 - `clarification_question` = null
 - provide a clean `refined_question`
+- provide `date_range` with both from_date and to_date
 - provide `query_specs` with all extracted details
 
 ## Rules
+- Never set ready_for_sql=true unless BOTH from_date and to_date are filled in date_range.
 - Never generate SQL.
 - Never call any tool except `verify_station_identifier` when station naming is ambiguous.
 - Keep the refinement simple and deterministic.

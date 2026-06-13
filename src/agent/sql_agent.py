@@ -10,7 +10,7 @@ from src.agent.tools import SQLTools
 db_tools = SQLTools()
 
 model_provider = LLMProvider()
-model = model_provider.get_chatns_model()
+model = model_provider.get_openai_model()
 
 
 DEFAULT_INSTRUCTIONS = """

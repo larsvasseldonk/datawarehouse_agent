@@ -38,10 +38,8 @@ def main():
             refinement_output: RefinementResponse = refinement_result.output
 
             if not refinement_output.ready_for_sql:
-                follow_up = refinement_output.clarification_question or (
-                    "Can you clarify what date range or scope you want for the incidents query?"
-                )
-                print(f"\nRefinement Agent 🤖: {follow_up}\n")
+                # Agent must always provide a specific clarification question when not ready
+                print(f"\nRefinement Agent 🤖: {refinement_output.clarification_question}\n")
                 continue
 
             print("\n[System] Refinement complete. Handing off to SQL agent...\n")

@@ -55,6 +55,21 @@ class LocationSpecs(BaseModel):
     )
 
 
+class DateRange(BaseModel):
+    """
+    Explicit date range for querying incident data.
+    Both dates are required before SQL handoff.
+    """
+    from_date: date | None = Field(
+        default=None,
+        description="The starting calendar boundary window date (YYYY-MM-DD format)."
+    )
+    to_date: date | None = Field(
+        default=None,
+        description="The ending calendar boundary window date (YYYY-MM-DD format)."
+    )
+
+
 class QuerySpecs(BaseModel):
     """
     The formal structural query contract generated during the conversation phase.
@@ -70,11 +85,11 @@ class QuerySpecs(BaseModel):
     )
     from_date: date | None = Field(
         default=None,
-        description="The formal, validated starting calendar boundary window date object (YYYY-MM-DD format)."
+        description="The formal, validated starting calendar boundary window date object (YYYY-MM-DD format). Use the RefinementResponse.date_range as the authoritative source."
     )
     to_date: date | None = Field(
         default=None,
-        description="The formal, validated ending calendar boundary window date object (YYYY-MM-DD format)."
+        description="The formal, validated ending calendar boundary window date object (YYYY-MM-DD format). Use the RefinementResponse.date_range as the authoritative source."
     )
     time_blocks: List[str] = Field(
         default_factory=list,
@@ -97,7 +112,7 @@ class RefinementResponse(BaseModel):
     """
 
     ready_for_sql: bool = Field(
-        description="True when the refined question and specs are sufficient for SQL execution."
+        description="True only when date_range is complete AND refined question and specs are sufficient for SQL execution."
     )
     clarification_question: str | None = Field(
         default=None,
@@ -106,8 +121,10 @@ class RefinementResponse(BaseModel):
     refined_question: str = Field(
         description="Canonical question text that the SQL agent should execute."
     )
+    date_range: DateRange = Field(
+        description="Explicit required date range. Must be filled before ready_for_sql=true."
+    )
     query_specs: QuerySpecs = Field(
-        default_factory=QuerySpecs,
         description="Best-known structured specification collected during refinement."
     )
 
