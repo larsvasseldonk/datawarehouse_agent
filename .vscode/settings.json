@@ -1,0 +1,12 @@
+{
+    "duckdb.databases": [
+        {
+            "alias": "db",
+            "type": "file",
+            "path": "/Users/larsvanasseldonk/Documents/repos/relational-rag/db/db.duckdb",
+            "readOnly": true,
+            "attached": false
+        }
+    ],
+    "duckdb.defaultDatabase": "db"
+}
