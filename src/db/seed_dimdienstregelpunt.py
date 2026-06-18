@@ -1,58 +1,11 @@
-import random
+import csv
+from pathlib import Path
 
 import duckdb
 
 from src.db.utils import stable_hash_int
 
-_VALID_FROM = "2025-01-01 00:00:00"
-_VALID_TO = "8888-12-31 23:59:59"
-_SEED = 2026
-_TARGET_TOTAL_ROWS = 4372
-
-_RSV_REGIONS = ["Noord-Oost", "Randstad-Noord", "Randstad-Zuid", "Zuid"]
-
-_SSVO_REGIONS = [
-    "PE Noord",
-    "PE Midden",
-    "PE Zuid",
-    "Twente-IJssel",
-    "West-Brabant en Zeeland",
-    "Groot Amsterdam",
-    "Rotterdam-Den Haag",
-]
-
-_CITY_NAMES = [
-    "Amsterdam",
-    "Rotterdam",
-    "Den Haag",
-    "Utrecht",
-    "Eindhoven",
-    "Groningen",
-    "Leeuwarden",
-    "Zwolle",
-    "Arnhem",
-    "Nijmegen",
-    "Maastricht",
-    "Amersfoort",
-    "Haarlem",
-    "Leiden",
-    "Dordrecht",
-    "Alkmaar",
-    "Hilversum",
-    "Deventer",
-    "Enschede",
-    "Assen",
-    "Venlo",
-    "Breda",
-    "Tilburg",
-    "Roosendaal",
-    "Hoorn",
-    "Den Helder",
-    "Vlissingen",
-    "Middelburg",
-    "Lelystad",
-    "Almere",
-]
+_STATIONS_CSV_PATH = Path(__file__).resolve().parents[2] / "data" / "stations.csv"
 
 _SENTINEL_ROWS = [
     (
@@ -93,111 +46,47 @@ _SENTINEL_ROWS = [
     ),
 ]
 
-_CORE_STATIONS = [
-    ("ASD", "Amsterdam Centraal"),
-    ("RTD", "Rotterdam Centraal"),
-    ("UT", "Utrecht Centraal"),
-    ("GVC", "Den Haag Centraal"),
-    ("EHV", "Eindhoven Centraal"),
-    ("GN", "Groningen"),
-    ("LWR", "Leeuwarden"),
-    ("ZL", "Zwolle"),
-    ("AH", "Arnhem Centraal"),
-    ("NM", "Nijmegen"),
-    ("MT", "Maastricht"),
-    ("AMF", "Amersfoort Centraal"),
-    ("HLM", "Haarlem"),
-    ("LEDN", "Leiden Centraal"),
-    ("DDR", "Dordrecht"),
-    ("AMR", "Alkmaar"),
-    ("HVSM", "Hilversum"),
-    ("DV", "Deventer"),
-    ("ES", "Enschede"),
-    ("ASN", "Assen"),
-    ("VL", "Venlo"),
-    ("BD", "Breda"),
-    ("TL", "Tilburg"),
-    ("RSD", "Roosendaal"),
-    ("HRN", "Hoorn"),
-    ("HDR", "Den Helder"),
-    ("VS", "Vlissingen"),
-    ("MDB", "Middelburg"),
-    ("LLS", "Lelystad Centrum"),
-    ("ALM", "Almere Centrum"),
-    ("VIN", "Virtueel Incheckpunt NS"),
-    ("GNVP", "Geen opvolgend stoppunt"),
-]
 
+def _load_station_rows() -> list:
+    rows = []
+    seen_codes = set()
+    seen_names = set()
 
-def _build_row(
-    code: str,
-    naam: str,
-    regio_rsv: str,
-    regio_ssvo: str,
-    ind_backup_vens: int,
-    ind_standplaats_vens: int,
-) -> tuple[int, str, str, str, str, int, int, str, str, int]:
-    return (
-        stable_hash_int(code, _VALID_FROM),
-        code,
-        naam,
-        regio_rsv,
-        regio_ssvo,
-        ind_backup_vens,
-        ind_standplaats_vens,
-        _VALID_FROM,
-        _VALID_TO,
-        1,
-    )
+    with _STATIONS_CSV_PATH.open(newline="", encoding="utf-8") as csv_file:
+        reader = csv.DictReader(csv_file)
+        for source_row in reader:
+            code = source_row["STATIONSAFKORTING"].strip()
+            naam = source_row["STATIONS_NAAM"].strip()
 
+            if code in seen_codes:
+                raise ValueError(f"Duplicate station code in stations.csv: {code}")
 
-def _generate_rows(total_positive_rows: int) -> list[tuple]:
-    rng = random.Random(_SEED)
-    rows: list[tuple] = []
-    used_codes: set[str] = set()
+            if naam in seen_names:
+                raise ValueError(f"Duplicate station name in stations.csv: {naam}")
 
-    for code, name in _CORE_STATIONS:
-        used_codes.add(code)
-        rows.append(
-            _build_row(
-                code=code,
-                naam=name,
-                regio_rsv=rng.choice(_RSV_REGIONS),
-                regio_ssvo=rng.choice(_SSVO_REGIONS),
-                ind_backup_vens=1 if rng.random() < 0.08 else 0,
-                ind_standplaats_vens=1 if rng.random() < 0.18 else 0,
+            seen_codes.add(code)
+            seen_names.add(naam)
+            geldig_vanaf = source_row["GELDIGVANAF"].strip()
+            rows.append(
+                (
+                    stable_hash_int(code, geldig_vanaf),
+                    code,
+                    naam,
+                    source_row["REGIO_RSV_NAAM"].strip() or None,
+                    source_row["REGIO_SSVO_NAAM"].strip() or None,
+                    int(source_row["IND_BACKUP_VENS"]),
+                    int(source_row["IND_STANDPLAATS_VENS"]),
+                    geldig_vanaf,
+                    source_row["GELDIGTM"].strip(),
+                    int(source_row["IND_HUIDIG"]),
+                )
             )
-        )
-
-    index = 1
-    while len(rows) < total_positive_rows:
-        city = rng.choice(_CITY_NAMES)
-        code = f"DRP{index:04d}"
-        if code in used_codes:
-            index += 1
-            continue
-
-        used_codes.add(code)
-        suffix = rng.choice(["Centrum", "Noord", "Zuid", "West", "Oost", "P+R"])
-        type_name = rng.choice(["Station", "Halte", "Knooppunt"])
-        rows.append(
-            _build_row(
-                code=code,
-                naam=f"{city} {suffix} {type_name}",
-                regio_rsv=rng.choice(_RSV_REGIONS),
-                regio_ssvo=rng.choice(_SSVO_REGIONS),
-                ind_backup_vens=1 if rng.random() < 0.05 else 0,
-                ind_standplaats_vens=1 if rng.random() < 0.12 else 0,
-            )
-        )
-        index += 1
 
     return rows
 
 
 def load_dimdienstregelpunt(connection: duckdb.DuckDBPyConnection) -> None:
-    positive_rows = _TARGET_TOTAL_ROWS - len(_SENTINEL_ROWS)
-    rows = _generate_rows(positive_rows)
+    rows = _load_station_rows()
 
     existing_keys = {row[0] for row in rows}
     for sentinel in _SENTINEL_ROWS:

@@ -1,5 +1,7 @@
 import duckdb
 import json
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from typing import Any, Dict, List
 from pathlib import Path
@@ -24,6 +26,7 @@ class SQLTools:
         """
         self.db_path = db_path
         self.con = duckdb.connect(self.db_path)
+        self._stations_cache = None
 
 
     def get_db_metadata(self) -> Dict[str, Any]:
@@ -41,7 +44,12 @@ class SQLTools:
 
         if cache_file.exists():
             with open(cache_file, "r") as f:
-                return json.load(f)
+                cached_metadata = json.load(f)
+            if "_stations" in cached_metadata:
+                cached_metadata.pop("_stations", None)
+                with open(cache_file, "w") as f:
+                    json.dump(cached_metadata, f, indent=4)
+            return cached_metadata
 
         # Construct metadata dictionary
         db_metadata = {}
@@ -213,27 +221,160 @@ class SQLTools:
             return f"Error while executing SQL query '{query}': {e}"
     
 
-    def search_station_name(self, station_name: str) -> List[str]:
+    def validate_date_range(self, from_date: str, to_date: str) -> tuple[bool, str, str, str]:
         """
-        Searches for a station name in the database.
-
+        Validates that the requested date range is within the database's available data.
+        Uses precomputed metadata for performance.
+        
         Args:
-            station_name (str): The name of the station to search for.
+            from_date: Start date (YYYY-MM-DD format)
+            to_date: End date (YYYY-MM-DD format)
+        
         Returns:
-            List[str]: List of stations that match the search criteria, empty list otherwise.
+            Tuple of (is_valid, min_date, max_date, message)
         """
+        try:
+            # Get metadata with precomputed date range
+            metadata = self.get_db_metadata()
+            
+            # Extract date range from factincidentmkns metadata
+            if "factincidentmkns" not in metadata:
+                return False, "", "", "Could not find factincidentmkns in metadata"
+            
+            date_range_str = metadata["factincidentmkns"].get("date_range", "")
+            # Parse: "Date range (both inclusive) to query in factincidentmkns: 2025-01-01 to 2025-12-31"
+            if not date_range_str or " to " not in date_range_str:
+                return False, "", "", "Could not parse date range from metadata"
+            
+            parts = date_range_str.split(" to ")
+            min_date = parts[-2].strip().split()[-1]  # Get last part before " to "
+            max_date = parts[-1].strip()
+            
+            # Validate date format and comparison
+            try:
+                from datetime import datetime
+                from_dt = datetime.strptime(from_date, "%Y-%m-%d")
+                to_dt = datetime.strptime(to_date, "%Y-%m-%d")
+                min_dt = datetime.strptime(min_date, "%Y-%m-%d")
+                max_dt = datetime.strptime(max_date, "%Y-%m-%d")
+                
+                is_valid = (from_dt >= min_dt and to_dt <= max_dt and from_dt <= to_dt)
+                
+                if is_valid:
+                    message = f"✓ Date range valid. Database contains incident data from {min_date} to {max_date}."
+                else:
+                    message = f"✗ Invalid date range. Database contains incident data from {min_date} to {max_date}. "
+                    if from_dt > to_dt:
+                        message += "From date must be before or equal to to date."
+                    elif from_dt < min_dt or to_dt > max_dt:
+                        message += "Requested dates are outside available data range."
+                
+                return is_valid, min_date, max_date, message
+                
+            except ValueError as e:
+                return False, min_date, max_date, f"Invalid date format: {e}"
+        
+        except Exception as e:
+            return False, "", "", f"Error validating date range: {e}"
 
-        result = self.con.execute(f"""
-            SELECT 
-                dienstregelpunt_code, 
-                dienstregelpunt_naam
-            FROM dimdienstregelpunt
-            WHERE dienstregelpunt_naam ILIKE '%{station_name}%'
-        """).fetchall()
+    def _get_all_stations_cached(self) -> List[Dict[str, str]]:
+        """
+        Retrieves all stations and regions from dimdienstregelpunt and caches them.
+        
+        Returns:
+            List[Dict]: List of dicts with dienstregelpunt_code, dienstregelpunt_naam, and region info.
+        """
+        try:
+            result = self.con.execute("""
+                SELECT 
+                    dienstregelpunt_code,
+                    dienstregelpunt_naam,
+                    COALESCE(regio_rsv_naam, 'Unknown') as regio_rsv_naam,
+                    COALESCE(regio_ssvo_naam, 'Unknown') as regio_ssvo_naam
+                FROM dimdienstregelpunt
+                WHERE ind_huidig = 1
+                ORDER BY dienstregelpunt_naam
+            """).fetchall()
+            
+            stations = [
+                {
+                    "code": row[0],
+                    "naam": row[1],
+                    "regio_rsv": row[2],
+                    "regio_ssvo": row[3]
+                }
+                for row in result
+            ]
+            return stations
+        except Exception as e:
+            print(f"Error retrieving stations: {e}")
+            return []
 
-        list_of_stations = [row[0] for row in result]
+    def _get_stations_cache_file(self) -> Path:
+        """
+        Returns the cache file path for station and region data.
+        """
+        cache_dir = Path(".cache")
+        cache_dir.mkdir(exist_ok=True)
+        return cache_dir / "stations.json"
 
-        return list_of_stations
+    def _load_or_build_stations_cache(self) -> List[Dict[str, str]]:
+        """
+        Loads stations from a dedicated cache file, or rebuilds it from the database.
+        """
+        cache_file = self._get_stations_cache_file()
+
+        if cache_file.exists():
+            try:
+                with open(cache_file, "r") as f:
+                    return json.load(f)
+            except Exception:
+                # If cache is corrupted, rebuild it from source.
+                pass
+
+        stations = self._get_all_stations_cached()
+        with open(cache_file, "w") as f:
+            json.dump(stations, f, indent=4)
+        return stations
+    
+    
+    def get_all_stations(self) -> List[Dict[str, str]]:
+        """
+        Returns the cached list of all available stations with their regions.
+        
+        Returns:
+            List[Dict]: List of station dicts with code, naam, and region info.
+        """
+        if self._stations_cache is None:
+            self._stations_cache = self._load_or_build_stations_cache()
+        return self._stations_cache
+    
+    
+    def validate_station_name(self, station_name: str) -> tuple[bool, str]:
+        """
+        Validates that a station name exists exactly in the database.
+        Uses cached station data for performance.
+        
+        Args:
+            station_name: The exact station name to validate
+        
+        Returns:
+            Tuple of (is_valid, message)
+        """
+        stations = self.get_all_stations()
+        
+        # Check for exact match
+        matching_station = next(
+            (s for s in stations if s["naam"].lower() == station_name.lower()),
+            None
+        )
+        
+        if matching_station:
+            msg = f"✓ Station '{matching_station['naam']}' (code: {matching_station['code']}) found. "
+            msg += f"Region RSV: {matching_station['regio_rsv']}, Region SSVO: {matching_station['regio_ssvo']}"
+            return True, msg
+        else:
+            return False, f"✗ Station '{station_name}' not found. Use a valid station name."
 
 
     def run_sql(self, query: str) -> str:
@@ -286,3 +427,26 @@ class SQLTools:
                 "rows": [],
                 "error": str(e),
             }
+
+
+class PyTools:
+    """
+    Provides non-database Python utility tools.
+    """
+
+    def get_current_datetime(self) -> Dict[str, str]:
+        """
+        Returns the current Amsterdam datetime context for resolving relative date phrases.
+
+        Returns:
+            Dict[str, str]: Current timestamp details including ISO date/time and weekday.
+        """
+        amsterdam_tz = ZoneInfo("Europe/Amsterdam")
+        now = datetime.now(amsterdam_tz)
+        return {
+            "current_datetime_iso": now.isoformat(),
+            "current_date": now.date().isoformat(),
+            "current_time": now.strftime("%H:%M:%S"),
+            "weekday": now.strftime("%A"),
+            "timezone": "Europe/Amsterdam",
+        }

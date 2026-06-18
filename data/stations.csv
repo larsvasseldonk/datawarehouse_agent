@@ -1,0 +1,400 @@
+STATIONSAFKORTING,STATIONS_NAAM,GEMEENTE,REGIO_RSV_NAAM,REGIO_SSVO_NAAM,IND_BACKUP_VENS,IND_STANDPLAATS_VENS,GELDIGVANAF,GELDIGTM,IND_HUIDIG
+Hdr,Den Helder,Den Helder,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bnk,Bunnik,Bunnik,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Asdm,Amsterdam Muiderpoort,Amsterdam,RSV Randstad Noord,Amsterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Zwd,Zwijndrecht,Zwijndrecht,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Nkk,Nijkerk,Nijkerk,RSV Noord-Oost,Amersfoort,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Sgl,Houthem-St.Gerlach,Valkenburg aan de Geul,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Llzm,Lansingerland-Zoetermeer,Lansingerland,RSV Randstad Zuid,Den Haag,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Lc,Lochem,Lochem,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Sgn,Schagen,Schagen,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Brd,Barendrecht,Barendrecht,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Lwc,Leeuwarden Camminghaburen,Leeuwarden,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hlgh,Harlingen Haven,Harlingen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hr,Heerenveen,Heerenveen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ese,Enschede De Eschmarke,Enschede,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hvs,Hilversum,Hilversum,RSV Noord-Oost,Amersfoort,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Emn,Emmen,Emmen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+IJt,IJlst,Súdwest-Fryslân,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rtb,Rotterdam Blaak,Rotterdam,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dld,Den Dolder,Zeist,RSV Noord-Oost,Amersfoort,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Tbu,Tilburg Universiteit,Tilburg,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hb,Hoensbroek,Heerlen,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hry,Heerenveen IJsstadion,Heerenveen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Alm,Almere Centrum,Almere,RSV Noord-Oost,PE Noord,1,1,2022-12-01 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ashd,Amsterdam Holendrecht,Amsterdam,RSV Randstad Noord,Amsterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Kmr,Klimmen-Ransdaal,Voerendaal,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Lut,Geleen-Lutterade,Sittard-Geleen,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Cps,Capelle Schollevaar,Capelle aan den IJssel,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ddzd,Dordrecht Zuid,Dordrecht,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vndc,Veenendaal Centrum,Veenendaal,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ass,Amsterdam Sloterdijk,Amsterdam,RSV Randstad Noord,Amsterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hrt,Horst-Sevenum,Horst aan de Maas,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Wp,Weesp,Amsterdam,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Na,Nieuw Amsterdam,Emmen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Pmr,Purmerend,Purmerend,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Utm,Utrecht Maliebaan,Utrecht,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Sdtb,Sliedrecht Baanhoek,Sliedrecht,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Atn,Aalten,Aalten,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Wk,Workum,Súdwest-Fryslân,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dr,Dieren,Rheden,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Mp,Meppel,Meppel,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Swk,Steenwijk,Steenwijkerland,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hrl,Heerlen,Heerlen,RSV Zuid,Zuid- en Midden-Limburg,0,1,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hglg,Hengelo Gezondheidspark,Hengelo,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Almb,Almere Buiten,Almere,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vb,Voorburg,Leidschendam-Voorburg,RSV Randstad Zuid,Den Haag,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Asa,Amsterdam Amstel,Amsterdam,RSV Randstad Noord,Amsterdam,0,0,2022-10-31 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Uhz,Uithuizen,Het Hogeland,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Kpn,Kampen,Kampen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dn,Deurne,Deurne,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rat,Raalte,Raalte,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ddrs,Dordrecht Stadspolders,Dordrecht,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bgn,Bergen op Zoom,Bergen op Zoom,RSV Zuid,West-Brabant en Zeeland,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gnn,Groningen Noord,Groningen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vsv,Varsseveld,Oude IJsselstreek,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hvl,Hoevelaken,Nijkerk,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hd,Harderwijk,Harderwijk,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Tg,Tegelen,Venlo,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Laa,Den Haag Laan van NOI,'s-Gravenhage,RSV Randstad Zuid,Den Haag,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rsd,Roosendaal,Roosendaal,RSV Zuid,West-Brabant en Zeeland,0,1,2022-06-01 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Amf,Amersfoort Centraal,Amersfoort,RSV Noord-Oost,Amersfoort,1,1,2022-10-31 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Zl,Zwolle,Zwolle,RSV Noord-Oost,PE Noord,1,1,2023-02-08 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vlb,Vierlingsbeek,Boxmeer,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ck,Cuijk,Cuijk,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Amfs,Amersfoort Schothorst,Amersfoort,RSV Noord-Oost,Amersfoort,0,0,2024-07-15 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dvnk,De Vink,Leiden,RSV Randstad Zuid,Den Haag,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Mes,Meerssen,Meerssen,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vg,Vught,Vught,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Zlw,Lage Zwaluwe,Moerdijk,RSV Zuid,West-Brabant en Zeeland,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ehst,Eindhoven Stadion,Eindhoven,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Amr,Alkmaar,Alkmaar,RSV Randstad Noord,Alkmaar,1,1,2022-06-20 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Arn,Arnemuiden,Middelburg,RSV Zuid,West-Brabant en Zeeland,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ssh,Sassenheim,Teylingen,RSV Randstad Zuid,Den Haag,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hlm,Haarlem,Haarlem,RSV Randstad Noord,Amsterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Wt,Weert,Weert,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bl,Beilen,Midden-Drenthe,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ztmo,Zoetermeer Oost,Zoetermeer,RSV Randstad Zuid,Den Haag,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Fn,Franeker,Waadhoeke,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Shl,Schiphol Airport,Haarlemmermeer,RSV Randstad Noord,Amsterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Zvb,Zevenbergen,Moerdijk,RSV Zuid,West-Brabant en Zeeland,0,0,2026-06-14 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Mtn,Maastricht Noord,Maastricht,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vs,Vlissingen,Vlissingen,RSV Zuid,West-Brabant en Zeeland,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Apn,Alphen aan den Rijn,Alphen aan den Rijn,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Odz,Oldenzaal,Oldenzaal,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dln,Dalen,Coevorden,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hlg,Harlingen,Harlingen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Sdt,Sliedrecht,Sliedrecht,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Kbk,Klarenbeek,Voorst,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Go,Goor,Hof van Twente,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Wad,Waddinxveen,Waddinxveen,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Utzl,Utrecht Zuilen,Utrecht,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bdpb,Breda Prinsenbeek,Breda,RSV Zuid,West-Brabant en Zeeland,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Pt,Putten,Putten,RSV Noord-Oost,Amersfoort,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Htnc,Houten Castellum,Houten,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ac,Abcoude,De Ronde Venen,RSV Randstad Noord,Amsterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rhn,Rhenen,Rhenen,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Nmd,Nijmegen Dukenburg,Nijmegen,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Akl,Arkel,Molenlanden,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Swd,Sauwerd,Het Hogeland,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hmn,Hemmen-Dodewaard,Neder-Betuwe,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dvc,Deventer Colmschate,Deventer,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Utt,Utrecht Terwijde,Utrecht,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Pmw,Purmerend Weidevenne,Purmerend,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Egh,Eygelshoven,Kerkrade,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ust,Usquert,Het Hogeland,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bet,Best,Best,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bnn,Barneveld Noord,Barneveld,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Klp,Veenendaal-De Klomp,Ede,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Asdar,Amsterdam Arena,Amsterdam,RSV Randstad Noord,Amsterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hor,Hollandsche Rading,De Bilt,RSV Noord-Oost,Amersfoort,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rtst,Rotterdam Stadion,Rotterdam,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ow,Oss West,Oss,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ehs,Eindhoven Strijp-S,Eindhoven,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ekz,Enkhuizen,Enkhuizen,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Eghm,Eygelshoven Markt,Kerkrade,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hto,'s-Hertogenbosch Oost,'s-Hertogenbosch,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Kmw,Koudum-Molkwerum,Súdwest-Fryslân,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Lw,Leeuwarden,Leeuwarden,RSV Noord-Oost,PE Noord,0,1,2022-09-26 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vry,Venray,Venray,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ot,Oisterwijk,Oisterwijk,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Pmo,Purmerend Overwhere,Purmerend,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Tbr,Tilburg Reeshof,Tilburg,RSV Zuid,West-Brabant en Zeeland,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hno,Heino,Raalte,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rl,Ruurlo,Berkelland,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Lg,Landgraaf,Landgraaf,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ltv,Lichtenvoorde-Groenlo,Oost Gelre,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Wf,Wolfheze,Renkum,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Krd,Kerkrade Centrum,Kerkrade,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Odb,Oudenbosch,Halderberge,RSV Zuid,West-Brabant en Zeeland,0,0,2026-06-14 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Op,Opheusden,Neder-Betuwe,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ost,Olst,Olst-Wijhe,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ec,Echt,Echt-Susteren,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gnd,Hardinxveld-Giessendam,Hardinxveld-Giessendam,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Wsm,Winsum,Het Hogeland,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bdg,Bodegraven,Bodegraven-Reeuwijk,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ah,Arnhem Centraal,Arnhem,RSV Noord-Oost,Arnhem-Nijmegen,1,1,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rsw,Rijswijk,Rijswijk,RSV Randstad Zuid,Den Haag,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vp,Velp,Rheden,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Nmgo,Nijmegen Goffert,Nijmegen,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Zp,Zutphen,Zutphen,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Emnz,Emmen Zuid,Emmen,RSV Noord-Oost,PE Noord,0,0,2022-04-11 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bde,Bunde,Meerssen,RSV Zuid,Zuid- en Midden-Limburg,0,0,2026-06-14 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hks,Hoogkarspel,Drechterland,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Drp,Dronryp,Waadhoeke,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Zh,Zuidhorn,Westerkwartier,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vndw,Veenendaal West,Veenendaal,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Akm,Akkrum,Heerenveen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Utg,Uitgeest,Uitgeest,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hfd,Hoofddorp,Haarlemmermeer,RSV Randstad Noord,Amsterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Zv,Zevenaar,Zevenaar,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Fwd,Feanwalden,Dantumadiel,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gbr,Glanerbrug,Enschede,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Lp,Loppersum,Loppersum,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ldm,Leerdam,Vijfheerenlanden,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Tbg,Terborg,Oude IJsselstreek,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Zb,Zuidbroek,Midden-Groningen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hglo,Hengelo Oost,Hengelo,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vss,Vlissingen Souburg,Vlissingen,RSV Zuid,West-Brabant en Zeeland,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hm,Helmond,Helmond,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hvsp,Hilversum Sportpark,Hilversum,RSV Noord-Oost,Amersfoort,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gvmw,Den Haag Moerwijk,'s-Gravenhage,RSV Randstad Zuid,Den Haag,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Btl,Boxtel,Boxtel,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dtch,Doetinchem De Huet,Doetinchem,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dv,Deventer,Deventer,RSV Noord-Oost,Twente-IJssel,1,1,2023-01-02 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bll,Bloemendaal,Bloemendaal,RSV Randstad Noord,Amsterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hnk,Hoorn Kersenboogerd,Hoorn,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Almm,Almere Muziekwijk,Almere,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bp,Buitenpost,Achtkarspelen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rtn,Rotterdam Noord,Rotterdam,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gk,Grijpskerk,Westerkwartier,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gr,Gorinchem,Gorinchem,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Twl,Twello,Voorst,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Stz,Soest Zuid,Soest,RSV Noord-Oost,Amersfoort,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bmn,Brummen,Brummen,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gv,Den Haag HS,'s-Gravenhage,RSV Randstad Zuid,Den Haag,1,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Apd,Apeldoorn,Apeldoorn,RSV Noord-Oost,Twente-IJssel,1,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Zbm,Zaltbommel,Zaltbommel,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hgv,Hoogeveen,Hoogeveen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Kw,Kropswolde,Midden-Groningen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Utln,Utrecht Lunetten,Utrecht,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Kpnz,Kampen Zuid,Kampen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rs,Rosmalen,'s-Hertogenbosch,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dl,Dalfsen,Dalfsen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bnc,Barneveld Centrum,Barneveld,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Nsch,Bad Nieuweschans,Oldambt,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Da,Daarlerveen,Hellendoorn,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dron,Dronten,Dronten,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Www,Winterswijk West,Winterswijk,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dwe,De Westereen,Dantumadiel,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Asdz,Amsterdam Zuid,Amsterdam,RSV Randstad Noord,Amsterdam,0,0,2022-12-19 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Did,Didam,Montferland,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Mt,Maastricht,Maastricht,RSV Zuid,Zuid- en Midden-Limburg,0,0,2022-09-26 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gln,Geleen Oost,Sittard-Geleen,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Nh,Nuth,Beekdaelen,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rd,Roodeschool,Het Hogeland,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Wadt,Waddinxveen Triangel,Waddinxveen,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dei,Deinum,Waadhoeke,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hze,Heeze,Heeze-Leende,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Db,Driebergen-Zeist,Utrechtse Heuvelrug,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Br,Blerick,Venlo,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Nvd,Nijverdal,Hellendoorn,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Esk,Enschede Kennispark,Enschede,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Wm,Wormerveer,Zaanstad,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ut,Utrecht Centraal,Utrecht,RSV Randstad Noord,Utrecht,1,1,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Etn,Etten-Leur,Etten-Leur,RSV Zuid,West-Brabant en Zeeland,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hdg,Hurdegaryp,Tytsjerksteradiel,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hlms,Haarlem Spaarnwoude,Haarlem,RSV Randstad Noord,Amsterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hk,Heemskerk,Heemskerk,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ovn,Overveen,Bloemendaal,RSV Randstad Noord,Amsterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bv,Beverwijk,Beverwijk,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dtc,Doetinchem,Doetinchem,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rv,Reuver,Beesel,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Aml,Almelo,Almelo,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Cl,Culemborg,Culemborg,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vd,Vorden,Bronckhorst,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Zzs,Zaandijk Zaanse Schans,Zaanstad,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ed,Ede-Wageningen,Ede,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2022-03-22 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Za,Zetten-Andelst,Overbetuwe,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gdg,Gouda Goverwelle,Gouda,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bf,Baflo,Het Hogeland,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Srn,Susteren,Echt-Susteren,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gz,Gilze-Rijen,Gilze en Rijen,RSV Zuid,West-Brabant en Zeeland,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hbzm,Hardinxveld Blauwe Zoom,Sliedrecht,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hmh,Helmond 't Hout,Helmond,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ndb,Naarden-Bussum,Gooise Meren,RSV Noord-Oost,Amersfoort,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dmnz,Diemen Zuid,Diemen,RSV Randstad Noord,Amsterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hwd,Heerhugowaard,Heerhugowaard,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bn,Borne,Borne,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Nml,Nijmegen Lent,Nijmegen,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ktr,Kesteren,Neder-Betuwe,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rsn,Rijssen,Rijssen-Holten,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Wtv,Westervoort,Westervoort,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hvsm,Hilversum Media Park,Hilversum,RSV Noord-Oost,Amersfoort,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Brn,Baarn,Baarn,RSV Noord-Oost,Amersfoort,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bd,Breda,Breda,RSV Zuid,West-Brabant en Zeeland,1,1,2022-06-20 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hrn,Haren,Groningen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Wfm,Warffum,Het Hogeland,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Sm,Swalmen,Roermond,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Es,Enschede,Enschede,RSV Noord-Oost,Twente-IJssel,0,0,2022-09-26 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gdm,Geldermalsen,West Betuwe,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Edn,Eijsden,Eijsden-Margraten,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Eem,Eemshaven,Delfzijl,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hdrz,Den Helder Zuid,Den Helder,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bsmz,Bussum Zuid,Gooise Meren,RSV Noord-Oost,Amersfoort,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Edc,Ede Centrum,Ede,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hon,Holten,Rijssen-Holten,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Apg,Appingedam,Appingedam,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Almo,Almere Oostvaarders,Almere,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rtz,Rotterdam Zuid,Rotterdam,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Co,Coevorden,Coevorden,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dz,Delfzijl,Delfzijl,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hgl,Hengelo,Hengelo,RSV Noord-Oost,Twente-IJssel,1,1,2022-04-19 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Mmlh,Mook Molenhoek,Mook en Middelaar,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ddr,Dordrecht,Dordrecht,RSV Randstad Zuid,Rotterdam,1,0,2022-04-05 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bkf,Bovenkarspel Flora,Stede Broec,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vem,Voorst-Empe,Voorst,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Obd,Obdam,Koggenland,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Wh,Wijhe,Olst-Wijhe,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Wd,Woerden,Woerden,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Wv,Wolvega,Weststellingwerf,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ana,Anna Paulowna,Hollands Kroon,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Sk,Sneek,Súdwest-Fryslân,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ww,Winterswijk,Winterswijk,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rta,Rotterdam Alexander,Rotterdam,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Est,Elst,Overbetuwe,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hil,Hillegom,Hillegom,RSV Randstad Zuid,Den Haag,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Tpsw,Tiel Passewaaij,Tiel,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ht,'s-Hertogenbosch,'s-Hertogenbosch,RSV Zuid,Oost-Brabant en Noord-Limburg,1,1,2022-10-31 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Kbd,Krabbendijke,Reimerswaal,RSV Zuid,West-Brabant en Zeeland,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Zvt,Zandvoort aan Zee,Zandvoort,RSV Randstad Noord,Amsterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Asd,Amsterdam Centraal,Amsterdam,RSV Randstad Noord,Amsterdam,1,1,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dvd,Duivendrecht,Ouder-Amstel,RSV Randstad Noord,Amsterdam,0,0,2022-03-22 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Asb,Amsterdam Bijlmer ArenA,Amsterdam,RSV Randstad Noord,Amsterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Assp,Amsterdam Science Park,Amsterdam,RSV Randstad Noord,Amsterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gerp,Groningen Europapark,Groningen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Apdm,Apeldoorn De Maten,Apeldoorn,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Lls,Lelystad Centrum,Lelystad,RSV Noord-Oost,PE Noord,0,0,2022-03-22 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vdl,Voerendaal,Voerendaal,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bkl,Breukelen,Stichtse Vecht,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Utvr,Utrecht Vaartsche Rijn,Utrecht,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Sknd,Sneek Noord,Súdwest-Fryslân,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rai,Amsterdam RAI,Amsterdam,RSV Randstad Noord,Amsterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hwzb,Halfweg-Zwanenburg,Haarlemmermeer,RSV Randstad Noord,Amsterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hmbh,Helmond Brouwhuis,Helmond,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vtn,Vleuten,Utrecht,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hlo,Heiloo,Heiloo,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hdb,Hardenberg,Hardenberg,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Nm,Nijmegen,Nijmegen,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2023-02-06 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Mtr,Maastricht Randwijck,Maastricht,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bsk,Boskoop,Alphen aan den Rijn,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vl,Venlo,Venlo,RSV Zuid,Zuid- en Midden-Limburg,0,0,2022-03-29 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gbg,Gramsbergen,Hardenberg,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dtcp,Delft Campus,Delft,RSV Randstad Zuid,Den Haag,0,0,2024-07-15 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Wadn,Waddinxveen Noord,Waddinxveen,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Eml,Ermelo,Ermelo,RSV Noord-Oost,Amersfoort,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gd,Gouda,Gouda,RSV Randstad Noord,Utrecht,1,0,2022-06-20 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bdm,Bedum,Het Hogeland,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vdm,Veendam,Veendam,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Zlsh,Zwolle Stadshagen,Zwolle,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Drh,Driehuis,Velsen,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Tl,Tiel,Tiel,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Nmh,Nijmegen Heyendaal,Nijmegen,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Cvm,Chevremont,Kerkrade,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Utlr,Utrecht Leidsche Rijn,Utrecht,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Sptz,Santpoort Zuid,Velsen,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hrlw,Heerlen Woonboulevard,Heerlen,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Stv,Stavoren,Súdwest-Fryslân,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Wz,Wezep,Oldebroek,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Mdb,Middelburg,Middelburg,RSV Zuid,West-Brabant en Zeeland,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bmr,Boxmeer,Boxmeer,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Avat,Amersfoort Vathorst,Amersfoort,RSV Noord-Oost,Amersfoort,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Mas,Maarssen,Stichtse Vecht,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rh,Rheden,Rheden,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ldl,Leiden Lammenschans,Leiden,RSV Randstad Zuid,Den Haag,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Apdo,Apeldoorn Osseveld,Apeldoorn,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hn,Hoorn,Hoorn,RSV Randstad Noord,Alkmaar,0,0,2022-06-20 00:00:00.000000,8888-12-31 23:59:59.999999,1
+O,Oss,Oss,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Mg,Mantgum,Leeuwarden,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vst,Voorschoten,Voorschoten,RSV Randstad Zuid,Den Haag,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Mth,Martenshoek,Midden-Groningen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ddn,Delden,Hof van Twente,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gdr,Gaanderen,Doetinchem,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Nwk,Nieuwerkerk a/d IJssel,Zuidplas,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ehv,Eindhoven Centraal,Eindhoven,RSV Zuid,Oost-Brabant en Noord-Limburg,1,1,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vhp,Vroomshoop,Twenterand,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Nvp,Nieuw Vennep,Haarlemmermeer,RSV Randstad Noord,Amsterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Had,Heemstede-Aerdenhout,Heemstede,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rb,Rilland-Bath,Reimerswaal,RSV Zuid,West-Brabant en Zeeland,0,0,2026-06-14 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ampo,Almere Poort,Almere,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Krg,Kruiningen-Yerseke,Reimerswaal,RSV Zuid,West-Brabant en Zeeland,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Cas,Castricum,Castricum,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hnp,Hindeloopen,Súdwest-Fryslân,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Amri,Almelo de Riet,Almelo,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rvs,Ravenstein,Oss,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Almp,Almere Parkwijk,Almere,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dvn,Duiven,Duiven,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bhdv,Boven Hardinxveld,Hardinxveld-Giessendam,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ypb,Den Haag Ypenburg,'s-Gravenhage,RSV Randstad Zuid,Den Haag,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Sda,Scheemda,Oldambt,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Amrn,Alkmaar Noord,Alkmaar,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gn,Groningen,Groningen,RSV Noord-Oost,PE Noord,0,1,2022-11-21 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Wl,Wehl,Doetinchem,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gs,Goes,Goes,RSV Zuid,West-Brabant en Zeeland,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dmn,Diemen,Diemen,RSV Randstad Noord,Amsterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vz,Vriezenveen,Twenterand,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Sog,Schin op Geul,Valkenburg aan de Geul,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bkg,Bovenkarspel-Grootebroek,Stede Broec,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ztm,Zoetermeer,Zoetermeer,RSV Randstad Zuid,Den Haag,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dt,Delft,Delft,RSV Randstad Zuid,Den Haag,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Sbk,Spaubeek,Beek,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Asdl,Amsterdam Lelylaan,Amsterdam,RSV Randstad Noord,Amsterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Dzw,Delfzijl West,Delfzijl,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bzl,Kapelle-Biezelinge,Kapelle,RSV Zuid,West-Brabant en Zeeland,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Std,Sittard,Sittard-Geleen,RSV Zuid,Zuid- en Midden-Limburg,1,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vh,Voorhout,Teylingen,RSV Randstad Zuid,Den Haag,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bhv,Bilthoven,De Bilt,RSV Noord-Oost,Amersfoort,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gp,Geldrop,Geldrop-Mierlo,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Stm,Stedum,Loppersum,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Zdk,Zaandam Kogerveld,Zaanstad,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Sptn,Santpoort Noord,Velsen,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Sn,Schinnen,Beekdaelen,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ahp,Arnhem Velperpoort,Arnhem,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bk,Beek=Elsloo,Beek,RSV Zuid,Zuid- en Midden-Limburg,0,0,2026-06-14 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rtd,Rotterdam Centraal,Rotterdam,RSV Randstad Zuid,Rotterdam,1,1,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hmbv,Helmond Brandevoort,Helmond,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Mrn,Maarn,Utrechtse Heuvelrug,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hgz,Hoogezand-Sappemeer,Midden-Groningen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Wc,Wijchen,Wijchen,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Kz,Koog aan de Zaan,Zaanstad,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gvc,Den Haag Centraal,'s-Gravenhage,RSV Randstad Zuid,Den Haag,1,1,2022-06-20 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rlb,Rotterdam Lombardijen,Rotterdam,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Omn,Ommen,Ommen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bnz,Barneveld Zuid,Barneveld,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Wdn,Wierden,Wierden,RSV Noord-Oost,Twente-IJssel,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ahz,Arnhem Zuid,Arnhem,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Mz,Maarheeze,Weert,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Mrb,MariÃ«nberg,Hardenberg,RSV Noord-Oost,Twente-IJssel,0,0,2025-10-27 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Zd,Zaandam,Zaanstad,RSV Randstad Noord,Alkmaar,0,0,2022-09-26 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ledn,Leiden Centraal,Leiden,RSV Randstad Zuid,Den Haag,1,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Vk,Valkenburg,Valkenburg aan de Geul,RSV Zuid,Zuid- en Midden-Limburg,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ws,Winschoten,Oldambt,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ltn,Lunteren,Ede,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bsks,Boskoop Snijdelwijk,Alphen aan den Rijn,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Otb,Oosterbeek,Renkum,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Htn,Houten,Houten,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Kma,Krommenie-Assendelft,Zaanstad,RSV Randstad Noord,Alkmaar,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Uto,Utrecht Overvecht,Utrecht,RSV Randstad Noord,Utrecht,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ns,Nunspeet,Nunspeet,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Uhm,Uithuizermeeden,Het Hogeland,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Sd,Soestdijk,Soest,RSV Noord-Oost,Amersfoort,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Tb,Tilburg,Tilburg,RSV Zuid,Oost-Brabant en Noord-Limburg,0,0,2022-06-01 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gw,Grou-Jirnsum,Heerenveen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Hde,'t Harde,Elburg,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Gvm,Den Haag Mariahoeve,'s-Gravenhage,RSV Randstad Zuid,Den Haag,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Ahpr,Arnhem Presikhaaf,Arnhem,RSV Noord-Oost,Arnhem-Nijmegen,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Sdm,Schiedam Centrum,Schiedam,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Bsd,Beesd,West Betuwe,RSV Randstad Zuid,Rotterdam,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+St,Soest,Soest,RSV Noord-Oost,Amersfoort,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Asn,Assen,Assen,RSV Noord-Oost,PE Noord,0,0,2021-10-18 00:00:00.000000,8888-12-31 23:59:59.999999,1
+Rm,Roermond,Roermond,RSV Zuid,Zuid- en Midden-Limburg,0,0,2022-06-01 00:00:00.000000,8888-12-31 23:59:59.999999,1

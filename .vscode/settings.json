@@ -8,5 +8,10 @@
             "attached": false
         }
     ],
-    "duckdb.defaultDatabase": "db"
+    "duckdb.defaultDatabase": "db",
+    "workbench.editorAssociations": {
+        "*.copilotmd": "vscode.markdown.preview.editor",
+        "*.parquet": "duckdb.dataFileViewer",
+        "*.xlsx": "duckdb.dataFileViewer"
+    }
 }

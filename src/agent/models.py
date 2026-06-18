@@ -121,7 +121,7 @@ class RefinementResponse(BaseModel):
     refined_question: str = Field(
         description="Canonical question text that the SQL agent should execute."
     )
-    date_range: DateRange = Field(
+    date_range: DateRange | None = Field(
         description="Explicit required date range. Must be filled before ready_for_sql=true."
     )
     query_specs: QuerySpecs = Field(
