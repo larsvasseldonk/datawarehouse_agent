@@ -1,46 +1,31 @@
-from pydantic_ai import Agent
+from dataclasses import dataclass
+from pydantic_ai import Agent, RunContext
 from pydantic import BaseModel, Field
-
 from pathlib import Path
 import json
+import os
+import duckdb
+import logfire
 
-DB_METADATA_CACHE_FILEPATH = Path(".cache/db_metadata.json")
+# Configure Logfire observability
+logfire.configure(send_to_logfire="if-token-present")
+logfire.instrument_pydantic_ai()
 
-DEFAULT_INSTRUCTIONS = """
-You are a question refinement agent. Your task is to evaluate the user's 
-question and determine whether it can be answered by the SQL agent based 
-on the available data. 
+# Path configuration tracking project roots
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
+DB_PATH = ROOT_DIR / "db/db.duckdb"
 
-You will assess the question for clarity, completeness, and data availability.
+@dataclass
+class RefinementAgentConfig:
+    """Configuration settings for the QuestionRefinementAgent."""
+    name: str = "QuestionRefinementAgent"
+    model: str = "gpt-4o-mini"
 
-If you can't extract all necessary information from the user's question, 
-ask follow-up questions.
-""".strip()
-
-
-def get_data_availability_instructions() -> str:
-    """
-    Returns a string containing instructions for the question refinement agent to assess data availability.
-    """
-
-    script_dir = Path(__file__).resolve().parent
-    cache_file = script_dir / "../../" / DB_METADATA_CACHE_FILEPATH
-
-    try:
-        with open(cache_file, "r") as f:
-            db_metadata = json.load(f)
-            table_availability_str = ""
-            for table in db_metadata.values():
-                table_availability_str += f"Table: {table['name']}\nDescription: {table['comment']}\n"
-            return table_availability_str
-    except Exception as e:
-        raise Exception(f"Error while reading Database metadata cache: {e}")
-        
-        
-TABLE_AVAILABILITY_INSTRUCTIONS = f"""
-The following tables are available in the database, along with their descriptions:
-{get_data_availability_instructions()}
-""".strip()
+@dataclass
+class Deps:
+    """Runtime dependencies shared across tool executions and prompts."""
+    conn: duckdb.DuckDBPyConnection = duckdb.connect(DB_PATH, read_only=True)
+    cache_path: Path = ROOT_DIR / ".cache/db_metadata.json"
 
 
 class QuestionRefinementResponse(BaseModel):
@@ -64,41 +49,73 @@ class QuestionRefinementResponse(BaseModel):
         description="A handoff boolean indicating whether the question is ready for SQL query generation"
     )
 
-def create_refinement_agent() -> Agent:
+
+refinement_config = RefinementAgentConfig()
+refinement_agent = Agent(
+    name=refinement_config.name,
+    model="openai-chat:" + refinement_config.model,
+    deps_type=Deps,
+    output_type=[str, QuestionRefinementResponse],
+) # type: ignore
+
+
+def get_sql_tables_str(cache_path: Path) -> str:
+    """Returns a formatted string of available database 
+    tables and their descriptions for the agent.
     """
-    Creates and returns a question refinement agent that evaluates the user's question
-    and determines whether it can be answered by the SQL agent based on the available data.
-    """
-    return Agent(
-        name="QuestionRefinementAgent",
-        model="openai-chat:gpt-4o-mini",
-        output_type=[str, QuestionRefinementResponse],
-        instructions=DEFAULT_INSTRUCTIONS + "\n\n" + TABLE_AVAILABILITY_INSTRUCTIONS,
-    ) # type: ignore
+    try:
+        with open(cache_path, "r") as f:
+            db_metadata = json.load(f)
+            tables_str = ""
+            for table in db_metadata.values():
+                tables_str += f"Table: {table['name']}\nDescription: {table['comment']}\n\n"
+            return tables_str.strip()
+    except Exception as e:
+        raise Exception(f"Error reading database metadata: {e}")
+
+
+@refinement_agent.instructions
+def provide_instructions(ctx: RunContext[Deps]) -> str:
+    """Assembles dynamic evaluation instructions mixed with active data availability layout."""
+    
+    table_availability_str = get_sql_tables_str(ctx.deps.cache_path)
+    return f"""
+You are a question refinement agent. Your task is to evaluate the user's 
+question and determine whether it can be answered by the SQL agent based 
+on the available data. 
+
+You will assess the question for clarity, completeness, and data availability.
+If you can't extract all necessary information from the user's question, 
+ask clarifying or follow-up questions.
+
+### AVAILABLE DATABASE TABLES:
+{table_availability_str.strip()}
+""".strip()
+
 
 if __name__ == "__main__":
-
-    refinement_agent = create_refinement_agent()
-    print(get_data_availability_instructions())
+    deps = Deps()
     refinement_history = []
-    while True:
-        try:
-            user_prompt = input("User 👤: ").strip()
-            if not user_prompt:
-                continue
-            if user_prompt.lower() in ['exit', 'quit']:
-                print("Closing system session. Goodbye!")
-                break
-            
-            refinement_result = refinement_agent.run_sync(
-                user_prompt, 
-                message_history=refinement_history
-            )
 
-            refinement_history = refinement_result.all_messages()
-            print(f"\nRefinement Agent 🤖: {refinement_result.output}\n")
-
+    with logfire.span('refinement_agent_session'):
+        while True:
+            try:
+                user_prompt = input("User 👤: ").strip()
+                if not user_prompt:
+                    continue
+                if user_prompt.lower() in ['exit', 'quit']:
+                    print("Closing system session. Goodbye!")
+                    break
                 
-        except (KeyboardInterrupt, EOFError):
-            print("\nTerminal interrupt encountered. Closing cleanly.")
-            break
+                refinement_result = refinement_agent.run_sync(
+                    user_prompt, 
+                    message_history=refinement_history,
+                    deps=deps
+                )
+
+                refinement_history = refinement_result.all_messages()
+                print(f"\nRefinement Agent 🤖: {refinement_result.output}\n")
+
+            except (KeyboardInterrupt, EOFError):
+                print("\nTerminal interrupt encountered. Closing cleanly.")
+                break

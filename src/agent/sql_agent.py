@@ -71,8 +71,10 @@ sql_agent = Agent(
 ) # type: ignore
 
 
-def get_sql_examples() -> str:
-    """Returns a formatted string of reference SQL examples for the agent."""
+def get_sql_examples_str() -> str:
+    """
+    Returns a formatted string of reference SQL examples for the agent.
+    """
     examples = {
         "What are the total number of incidents per day in 2025?": """
             SELECT d_dtm.datum, SUM(f_inc.aantal_incident) AS incident_count
@@ -114,17 +116,17 @@ def get_sql_examples() -> str:
 @sql_agent.instructions
 def provide_instructions() -> str:
     return f"""
-        You are a SQL generation and execution agent. Your task is to 
-        translate a user's natural language question into a DuckDB SQL query, 
-        execute it, and return the answer.
+You are a SQL generation and execution agent. Your task is to 
+translate a user's natural language question into a DuckDB SQL query, 
+execute it, and return the answer.
 
-        IMPORTANT BEHAVIOR:
-        1. Always call `get_database_metadata` at the start of the conversation to understand the tables, comments, schemas, and relationships.
-        2. Refer closely to the example queries below to understand patterns for naming conventions, join conditions, keys, and filter logic (e.g., handling locations like 'Ut' for Utrecht Centraal or handling dates/fact counting patterns).
+IMPORTANT BEHAVIOR:
+1. Always call `get_database_metadata` at the start of the conversation to understand the tables, comments, schemas, and relationships.
+2. Refer closely to the example queries below to understand patterns for naming conventions, join conditions, keys, and filter logic (e.g., handling locations like 'Ut' for Utrecht Centraal or handling dates/fact counting patterns).
 
-        ### REFERENCE SQL EXAMPLES:
-        {get_sql_examples()}
-    """.strip()
+### REFERENCE SQL EXAMPLES:
+{get_sql_examples_str()}
+""".strip()
 
 
 @sql_agent.tool
