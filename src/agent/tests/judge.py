@@ -2,6 +2,8 @@ from pydantic import BaseModel, Field
 from pydantic_ai import Agent 
 
 from src.agent.tests.utils import collect_tools, get_model_name
+from src.agent.tests.cost_tracker import capture_usage
+
 
 judge_instructions = f"""
 You are an expert judge evaluating the performance of an
@@ -38,7 +40,7 @@ class JudgeFeedback(BaseModel):
 def create_judge_agent():
     agent = Agent(
         name="judge",
-        model="openai:gpt-4o-mini",
+        model="openai-chat:gpt-4o-mini",
         instructions=judge_instructions,
         output_type=JudgeFeedback
     )
@@ -79,7 +81,10 @@ async def assert_criteria(result, criteria):
 
     judge_result = await judge_agent.run(judge_user_prompt)
 
-    print('judge feedback:')
+    model = get_model_name(judge_agent)
+    capture_usage(model, judge_result)
+
+    print("Judge feedback:")
     print(judge_result.output.feedback)
 
     for criterion in judge_result.output.criteria:

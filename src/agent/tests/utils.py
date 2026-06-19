@@ -1,10 +1,6 @@
 from dataclasses import dataclass
 from typing import Any, Dict
 
-from src.agent.agent import AgentStreamRunner
-
-from jaxn import JSONParserHandler
-
 
 @dataclass
 class ToolCall:
@@ -33,11 +29,4 @@ def collect_tools(messages):
 def get_model_name(agent):
     provider = agent.model.system
     model_name = agent.model.model_name
-    return f'{provider}:{model_name}'
-
-
-async def run_agent_test(agent, user_prompt, message_history=None):
-    runner = AgentStreamRunner(agent, JSONParserHandler())
-    result = await runner.run(user_prompt, message_history)
-
-    return result
+    return f"{provider}:{model_name}"
