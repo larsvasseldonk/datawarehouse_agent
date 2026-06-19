@@ -7,11 +7,7 @@ import os
 import duckdb
 import logfire
 
-# Configure Logfire observability
-logfire.configure(send_to_logfire="if-token-present")
-logfire.instrument_pydantic_ai()
 
-# Path configuration tracking project roots
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 DB_PATH = ROOT_DIR / "db/db.duckdb"
 
@@ -94,6 +90,9 @@ ask clarifying or follow-up questions.
 
 
 if __name__ == "__main__":
+    logfire.configure(send_to_logfire="if-token-present")
+    logfire.instrument_pydantic_ai()
+
     deps = Deps()
     refinement_history = []
 

@@ -11,25 +11,11 @@ import json
 import os
 import duckdb
 import textwrap
-
 import logfire
 
-logfire.configure(send_to_logfire="if-token-present")
-logfire.instrument_pydantic_ai()
 
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 DB_PATH = ROOT_DIR / "db/db.duckdb"
-
-DEFAULT_INSTRUCTIONS = """
-You are SQL generation and execution agent. Your task is to 
-translate a user's natural language question into a SQL query 
-that can be executed against the DuckDB database, and then execute 
-that query to retrieve the answer.
-
-IMPORTANT:
-- Always call `get_database_metadata` at the start of the conversation 
-to understand the tables, their comments, schemas, and relationships.
-""".strip()
 
 
 @dataclass
@@ -227,6 +213,8 @@ def execute_sql_query(ctx: RunContext[Deps], query: str) -> str:
 
 
 if __name__ == "__main__":
+    logfire.configure(send_to_logfire="if-token-present")
+    logfire.instrument_pydantic_ai()
 
     deps = Deps()
     sql_history = []
