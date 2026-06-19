@@ -1,7 +1,6 @@
 from pathlib import Path
 import logfire
 import duckdb
-import time
 
 from refinement_agent import refinement_agent, QuestionRefinementResponse
 from sql_agent import sql_agent, Deps
