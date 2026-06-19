@@ -40,7 +40,7 @@ def main():
                 refinement_result = refinement_agent.run_sync(
                     user_prompt,
                     message_history=refinement_history,
-                    deps=deps
+                    deps=deps # type: ignore
                 )
                 refinement_history = refinement_result.all_messages()
 
