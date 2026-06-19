@@ -11,11 +11,7 @@ from src.agent.tests.judge import assert_criteria
 @pytest.mark.asyncio
 async def test_agent_ambiguous_question():
     user_prompt = "Hoe veel incidenten?"
-    refinement_result = await refinement_agent.run(
-        user_prompt,
-        message_history=None,
-        deps=Deps()
-    )
+    refinement_result = await refinement_agent.run(user_prompt, deps=Deps())
 
     output = refinement_result.output
     assert isinstance(output, str)
@@ -50,7 +46,6 @@ async def test_agent_refined_question():
     user_prompt = "Wat is het totaal aantal incidenten geregistreerd in augustus 2025 op station Utrecht Centraal?"
     refinement_result = await refinement_agent.run(
         user_prompt,
-        message_history=None,
         deps=Deps()
     )
 
@@ -84,7 +79,6 @@ async def test_judge_refined_question():
 #     user_prompt = f"Wat is het totaal aantal incidenten geregistreerd in augustus {future_year}?"
 #     refinement_result = await refinement_agent.run(
 #         user_prompt,
-#         message_history=None,
 #         deps=Deps()
 #     )
 
