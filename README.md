@@ -1,50 +1,224 @@
-# Data Assistant Agent: Natural-Language Query Interface for Relational Data Warehouses
+# Relational RAG: Natural-Language Q&A over a Railway Incident Warehouse
 
-A data assitant that allows users to query a relational data warehouse using both natural language and reusable command shortcuts.
+A two-agent GenAI assistant that answers natural-language questions about Dutch
+Railways (NS) station-safety incidents by generating, executing, and explaining
+SQL over a DuckDB star-schema warehouse — no SQL knowledge required from the user.
 
 ## The Problem
 
-Business users cannot easily retrieve data from a complex data warehouse without relying on data engineers, due to the need for SQL and fragmented reporting tools. Data engineers spend significant time repeatedly answering similar questions and manually querying data, leading to inefficiency. There is no simple, trusted interface where users can quickly access validated data insights or reuse common queries.
+Station-safety and operations staff regularly need numbers from the incident
+warehouse ("how many incidents at Utrecht Centraal in August 2025?", "which
+report type is most common?"). Today those answers require SQL skills and depend
+on the data team, which is slow and creates a queue of repetitive ad-hoc
+requests. This project gives non-technical users a trusted, conversational way to
+ask those questions directly and get traceable answers (including the generated
+SQL), while keeping the system safely read-only.
 
 ## What It Does
 
-The system processes user messages via WhatsApp, either as natural language queries or predefined commands (e.g., /today, /revenue).
+The system runs a **two-stage agent pipeline**:
 
-### Input
-User messages via WhatsApp, either as natural language queries or predefined commands (e.g., /today, /revenue).
+1. **Refinement agent** — checks whether a question is answerable with the
+   available data, resolves ambiguity (date ranges, station names), and asks a
+   clarifying question when needed. It only hands off when the question is ready.
+2. **SQL agent** — inspects the live database schema, generates a DuckDB SQL
+   query grounded in reference NL→SQL examples, executes it read-only, and
+   returns a plain-language answer plus the SQL used and success/answer-found
+   flags for traceability.
 
-### Processing
-Classify user intent; retrieve relevant schema and similar past queries from a query memory system; generate and validate SQL using retrieval-augmented generation; execute queries in DuckDB; and compute trust signals based on similarity to previously validated queries.
+The pipeline is exposed through a **Streamlit chat app** (with live tool-call
+visibility) and a **CLI**. All agent runs are traced with **Logfire**.
 
-### Output
-Concise answers delivered in WhatsApp, including results, explanations, SQL traces, and trust indicators (e.g., similar queries, tables used).
+### Data Warehouse
 
-### Success Metric
-Reduction in repeated manual queries and improved user trust, measured by reuse of shortcuts and accuracy on predefined business questions.
+A DuckDB star schema of NS incident-log data, built and seeded locally:
+
+| Table | Type | Description |
+| --- | --- | --- |
+| `factincidentmkns` | fact | Registered incidents (counts) with foreign keys to all dimensions |
+| `dimdatum` | dimension | Calendar date |
+| `dimtijd` | dimension | Time of day |
+| `dimdienstregelpunt` | dimension | Station / service point (name, code) |
+| `dimlocatietype` | dimension | Location type |
+| `dimmeldingssoort` | dimension | Incident / report type |
+| `dimtreinnummer_treinserie` | dimension | Train number / series |
+
+## Architecture
+
+```mermaid
+flowchart LR
+    U[User question] --> R[Refinement agent]
+    R -- needs clarification --> U
+    R -- ready_for_sql --> S[SQL agent]
+    S -- get_database_metadata --> M[(DuckDB schema)]
+    S -- execute_sql_query --> DB[(DuckDB warehouse)]
+    S --> A[Answer + SQL + trust flags]
+    R -.-> L[Logfire tracing]
+    S -.-> L
+```
+
+See [docs/tools.md](docs/tools.md) for the agent tool definitions.
+
+## Project Structure
+
+```
+src/
+  agent/
+    app.py              # Streamlit chat app (primary entrypoint)
+    cli.py              # Interactive CLI for the two-agent pipeline
+    refinement_agent.py # Stage 1: question refinement / clarification agent
+    sql_agent.py        # Stage 2: SQL generation + execution agent (tools live here)
+    llm.py, utils.py    # Shared helpers
+    evals/              # LLM-judge evaluation harness + ground-truth datasets
+    tests/              # Unit tests + judge utilities
+  db/
+    setup_db.py         # Builds and seeds the DuckDB warehouse
+    seed_*.py           # Per-table seed scripts
+db/
+  tables/               # SQL DDL for fact and dimension tables
+  db.duckdb             # Generated warehouse (created by `make db`)
+docs/tools.md           # Agent tool reference
+```
 
 ## Setup
 
-1. Install uv if you don't have it yet: https://docs.astral.sh/uv/getting-started/installation/
+1. Install [uv](https://docs.astral.sh/uv/getting-started/installation/) if you
+   don't have it yet.
 
-2. Clone this repository (or download the zip and extract it).
+2. Clone this repository.
 
-3. Create a `.env` file from the template and add your API key:
+3. Create a `.env` file and add your OpenAI API key:
 
-       cp .env.example .env
+   ```bash
+   cp .env.example .env
+   # then edit .env and set OPENAI_API_KEY=...
+   ```
 
 4. Install dependencies:
 
-       uv sync
+   ```bash
+   uv sync
+   ```
 
-5. Start Jupyter:
+5. Build and seed the DuckDB warehouse:
 
-       uv run jupyter notebook
+   ```bash
+   make db
+   ```
 
-## Notebooks
+## Running the Application
 
-- `notebooks/01-setup.ipynb` - smoke test that confirms your environment works
-- `notebooks/02-rag.ipynb` - a minimal RAG baseline you can adapt to your own data
+Streamlit chat app (recommended):
 
-## Data
+```bash
+make app
+```
 
-Put your project data in the `data/` folder. See `notebooks/02-rag.ipynb` for how to load it.
+Interactive CLI:
+
+```bash
+make cli
+```
+
+Both require `OPENAI_API_KEY` in your environment / `.env` and a built database
+(`make db`).
+
+## Testing
+
+Unit tests cover the SQL agent (happy path, tool-call order, prompt-injection
+safety, out-of-scope questions) and the refinement agent. There is also an
+LLM-judge layer used in evaluation (see below).
+
+Run the unit tests from the repository root:
+
+```bash
+make test
+# or
+uv run pytest src/agent/tests
+```
+
+## Evaluation
+
+The agents are evaluated with an **LLM-as-judge** harness against ground-truth
+question sets in `src/agent/evals/`:
+
+- `questions_manual.csv` — a **hand-crafted** set of in-scope, out-of-scope, and
+  adversarial ("drop all tables") questions with type labels.
+- `questions_generated.csv` — an LLM-generated set for broader coverage.
+
+Run the full pipeline + judges:
+
+```bash
+make eval
+# or
+uv run python -m src.agent.evals.run_evals --questions questions_manual.csv
+```
+
+This runs the refinement + SQL agents on every question, applies a refinement
+judge and a SQL judge, and reports good/bad rates with a cost/time breakdown.
+
+**Judge alignment (manual evaluation):** human labels in `human_labels.json` are
+compared against the LLM judges to measure judge accuracy/precision/recall:
+
+```bash
+uv run python -m src.agent.evals.align_judges
+```
+
+A Streamlit labeling tool (`src/agent/evals/label_evals.py`) is provided to
+create and review the human labels.
+
+## Monitoring
+
+Agent runs are instrumented with **Logfire** (`logfire.instrument_pydantic_ai()`).
+With a Logfire token set, traces, spans, token usage, and tool calls are sent to
+the Logfire dashboard; without a token the app still runs
+(`send_to_logfire="if-token-present"`). To enable the dashboard, set your Logfire
+token in the environment and view runs at https://logfire.pydantic.dev. The
+Streamlit app additionally surfaces live tool calls per turn for in-session
+observability.
+
+## Reproducibility
+
+The data is generated locally and deterministically by the seed scripts, so no
+external dataset is required — `uv sync` + `make db` reproduces the full
+warehouse. The `uv.lock` file pins all dependencies.
+
+## Future Work
+
+Planned improvements to strengthen quality, observability, and operations:
+
+### Feedback-driven evaluation loop
+
+- Collect explicit user feedback in the Streamlit chat (e.g. 👍/👎 plus an
+  optional comment) on each answer, and log it alongside the question, refined
+  question, generated SQL, and result.
+- Feed thumbs-up interactions directly into the ground-truth dataset used by the
+  evaluation harness (`src/agent/evals/`), so the verified-question set grows
+  automatically from real usage and future eval runs reflect production traffic.
+
+### Richer agent tooling
+
+- **Refinement agent — `resolve_station_name`:** fuzzy-match user station phrases
+  against `dimdienstregelpunt` to disambiguate stations against real data before
+  handoff.
+- **SQL agent — `retrieve_sql_examples`:** replace the hardcoded NL→SQL example
+  set with top-k retrieval over an indexed example corpus, enabling proper
+  retrieval evaluation (hit rate / MRR).
+- **SQL agent — `create_plotly_visualisation`:** render trend/comparison answers
+  as charts in the chat instead of text-only.
+
+  See [docs/tools.md](docs/tools.md) for full candidate-tool definitions.
+
+### Containerization
+
+- Add a `Dockerfile` and `docker-compose.yml` so the entire system (warehouse
+  build + Streamlit app and its dependencies) starts with a single
+  `docker-compose up`, removing the need for a local Python/uv setup.
+
+### CI/CD
+
+- Add a GitHub Actions workflow to run the unit tests (`pytest`) on every push
+  and pull request.
+- Add a scheduled / on-demand workflow to run the LLM-judge evaluation suite and
+  publish the good/bad rates and cost report, catching regressions in agent
+  quality over time.
