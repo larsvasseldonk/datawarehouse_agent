@@ -182,3 +182,43 @@ observability.
 The data is generated locally and deterministically by the seed scripts, so no
 external dataset is required — `uv sync` + `make db` reproduces the full
 warehouse. The `uv.lock` file pins all dependencies.
+
+## Future Work
+
+Planned improvements to strengthen quality, observability, and operations:
+
+### Feedback-driven evaluation loop
+
+- Collect explicit user feedback in the Streamlit chat (e.g. 👍/👎 plus an
+  optional comment) on each answer, and log it alongside the question, refined
+  question, generated SQL, and result.
+- Feed thumbs-up interactions directly into the ground-truth dataset used by the
+  evaluation harness (`src/agent/evals/`), so the verified-question set grows
+  automatically from real usage and future eval runs reflect production traffic.
+
+### Richer agent tooling
+
+- **Refinement agent — `resolve_station_name`:** fuzzy-match user station phrases
+  against `dimdienstregelpunt` to disambiguate stations against real data before
+  handoff.
+- **SQL agent — `retrieve_sql_examples`:** replace the hardcoded NL→SQL example
+  set with top-k retrieval over an indexed example corpus, enabling proper
+  retrieval evaluation (hit rate / MRR).
+- **SQL agent — `create_plotly_visualisation`:** render trend/comparison answers
+  as charts in the chat instead of text-only.
+
+  See [docs/tools.md](docs/tools.md) for full candidate-tool definitions.
+
+### Containerization
+
+- Add a `Dockerfile` and `docker-compose.yml` so the entire system (warehouse
+  build + Streamlit app and its dependencies) starts with a single
+  `docker-compose up`, removing the need for a local Python/uv setup.
+
+### CI/CD
+
+- Add a GitHub Actions workflow to run the unit tests (`pytest`) on every push
+  and pull request.
+- Add a scheduled / on-demand workflow to run the LLM-judge evaluation suite and
+  publish the good/bad rates and cost report, catching regressions in agent
+  quality over time.

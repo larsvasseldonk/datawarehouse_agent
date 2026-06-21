@@ -30,7 +30,23 @@ Returns: the result rows as a string, or a `SQL Error: ...` message on failure.
 
 ## Candidate tools (future work)
 
-### create_plotly_visualisation
+### resolve_station_name (refinement agent)
+
+Description: Fuzzy-matches a user's free-text station phrase against
+`dimdienstregelpunt` (station name + code) and returns the best candidate
+matches. This lets the refinement agent confirm or disambiguate stations
+(e.g. "Utrecht" → `Ut` / "Utrecht Centraal") against real data instead of
+guessing, and ask a precise clarifying question when several stations match.
+When to call: During refinement, whenever the user references a station, before
+setting the `stations` field and handing off to the SQL agent.
+Inputs: `station_query` (the user's station phrase).
+Returns: a ranked list of `{dienstregelpunt_naam, dienstregelpunt_code, score}`
+candidates (empty if no plausible match).
+Impact: highest-impact addition for the refinement agent — it grounds entity
+resolution in the data, reducing downstream SQL failures from invalid station
+filters.
+
+### create_plotly_visualisation (SQL agent)
 
 Description: Converts the result set of an executed query into a Plotly figure
 that can be rendered to the user (e.g. a time-series line chart of incidents per
@@ -41,3 +57,17 @@ trend or comparison that is clearer as a chart.
 Inputs: `rows`, `column_names`, and an inferred `chart_type` / axis mapping.
 Returns: a serialized Plotly figure spec (and/or a rendered chart in the
 Streamlit app) alongside the text answer.
+
+### retrieve_sql_examples (SQL agent)
+
+Description: Retrieves the top-k most relevant NL→SQL example pairs for the
+current question from an indexed example corpus (e.g. via `minsearch`), instead
+of injecting a fixed, hardcoded example set into the prompt. The retrieved
+examples ground SQL generation in patterns most similar to the question.
+When to call: After schema metadata is retrieved and before drafting SQL, for
+every question.
+Inputs: `question` (the refined question), optional `k` (number of examples).
+Returns: a list of `{question, sql}` example pairs ranked by similarity.
+Impact: highest-impact addition for the SQL agent — it turns the static example
+list into a real retrieval step, improving SQL quality and enabling retrieval
+evaluation (hit rate / MRR) over the example corpus.
