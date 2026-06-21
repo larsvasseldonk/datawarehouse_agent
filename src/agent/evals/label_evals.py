@@ -16,7 +16,7 @@ except Exception:  # pragma: no cover - optional dependency
 
 EVALS_DIR = Path(__file__).resolve().parent
 RESULTS_PATH = EVALS_DIR / "results.json"
-LABELS_PATH = EVALS_DIR / "labels.json"
+LABELS_PATH = EVALS_DIR / "human_labels.json"
 DB_PATH = Path(__file__).resolve().parents[3] / "db" / "db.duckdb"
 
 FAILURE_CATEGORIES = [
