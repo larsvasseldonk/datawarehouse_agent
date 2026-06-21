@@ -1,31 +1,43 @@
-# Short list of tools for Data Assistant Agent:
+# Agent Tools
 
-retrieve_context
-Description: Finds relevant warehouse metadata plus similar previously verified NL→SQL pairs before any SQL drafting.
-When to call: First step for every user question.
-Inputs: user_question
-Returns: schema_context, verified_query_examples, retrieval_confidence
+The SQL agent (`src/agent/sql_agent.py`) is equipped with the following tools.
+The refinement agent uses no tools; it reasons over the available table list
+injected into its instructions and either asks a clarifying question or hands off
+a refined question.
 
-draft_sql_candidate
-Description: Generates a candidate SQL query (and short rationale for analyst) using retrieved context.
-When to call: After context retrieval, for new or partially matched questions.
-Inputs: user_question, schema_context, verified_query_examples
-Returns: sql_candidate, reasoning_summary, generation_confidence
+## get_database_metadata
 
-review_gate_and_queue
-Description: Decides whether SQL is safe and already trusted enough to run now, otherwise stores it for daily analyst review.
-When to call: After SQL drafting, always.
-Inputs: user_question, sql_candidate, confidences, guardrail_policy
-Returns: decision run_now_or_queue, review_ticket_id_optional, analyst_payload
+Description: Retrieves the complete warehouse schema metadata — table types
+(fact/dimension), table and column comments, columns and data types, primary and
+foreign keys, and date ranges for fact tables. Results are cached to
+`.cache/db_metadata.json` after the first call.
+When to call: First, before drafting any SQL, for every question.
+Inputs: (none; reads from the read-only DuckDB connection in `Deps`)
+Returns: a dict keyed by table name with `type`, `comment`, `columns`,
+`primary_key`, `foreign_keys`, and (for fact tables) `date_range`.
 
-run_verified_query
-Description: Executes only approved or previously verified read-only SQL against DuckDB and returns structured results.
-When to call: Only if review gate returns run_now.
-Inputs: sql_verified, row_limit, timeout_seconds
-Returns: rows, row_count, column_names, execution_status, execution_error_optional
+## execute_sql_query
 
-compose_whatsapp_answer
-Description: Converts results into short end-user text without exposing SQL, and handles pending-review responses when needed.
-When to call: Final step for every request.
-Inputs: user_question, query_results_or_pending_status, trust_summary
-Returns: user_message_text
+Description: Executes a DuckDB SQL query against the read-only warehouse and
+returns the result rows. The connection is opened read-only, so write/DDL
+statements (e.g. DROP/DELETE) cannot modify data.
+When to call: After schema metadata has been retrieved and a candidate SQL query
+has been drafted.
+Inputs: `query` (DuckDB SQL string)
+Returns: the result rows as a string, or a `SQL Error: ...` message on failure.
+
+---
+
+## Candidate tools (future work)
+
+### create_plotly_visualisation
+
+Description: Converts the result set of an executed query into a Plotly figure
+that can be rendered to the user (e.g. a time-series line chart of incidents per
+month, or a bar chart of incidents per station), instead of returning only a
+text answer.
+When to call: After `execute_sql_query` returns rows, when the question implies a
+trend or comparison that is clearer as a chart.
+Inputs: `rows`, `column_names`, and an inferred `chart_type` / axis mapping.
+Returns: a serialized Plotly figure spec (and/or a rendered chart in the
+Streamlit app) alongside the text answer.
