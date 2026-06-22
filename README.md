@@ -196,6 +196,13 @@ Planned improvements to strengthen quality, observability, and operations:
   evaluation harness (`src/agent/evals/`), so the verified-question set grows
   automatically from real usage and future eval runs reflect production traffic.
 
+
+### Enrich structured output
+
+- Add `followup_questions` to the SQL agent's structured output, so the refinement agent can suggest follow-ups
+  (e.g. "Do you want a breakdown by station?") and the Streamlit app can surface
+  them as buttons for one-click follow-up queries.
+
 ### Richer agent tooling
 
 - **Refinement agent — `resolve_station_name`:** fuzzy-match user station phrases
@@ -204,8 +211,6 @@ Planned improvements to strengthen quality, observability, and operations:
 - **SQL agent — `retrieve_sql_examples`:** replace the hardcoded NL→SQL example
   set with top-k retrieval over an indexed example corpus, enabling proper
   retrieval evaluation (hit rate / MRR).
-- **SQL agent — `create_plotly_visualisation`:** render trend/comparison answers
-  as charts in the chat instead of text-only.
 
   See [docs/tools.md](docs/tools.md) for full candidate-tool definitions.
 

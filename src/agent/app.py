@@ -8,6 +8,7 @@ from pathlib import Path
 
 import duckdb
 import logfire
+import plotly.io as pio
 import streamlit as st
 from dotenv import load_dotenv
 from pydantic_ai import FunctionToolCallEvent
@@ -167,6 +168,9 @@ def render_message(message: dict, idx: int) -> None:
     # Final answer is the primary content.
     st.markdown(message["answer"])
 
+    if message.get("figure_json"):
+        st.plotly_chart(pio.from_json(message["figure_json"]), use_container_width=True)
+
     col1, col2 = st.columns(2)
     col1.markdown("✅ Answer found" if message["answer_found"] else "⚠️ No answer")
     col2.markdown("✅ Query OK" if message["success"] else "❌ Query failed")
@@ -244,6 +248,8 @@ def build_assistant_response(user_prompt: str, deps: Deps) -> dict:
         with st.status("SQL agent is thinking...", expanded=True) as status:
             placeholder = st.empty()
             t_sql = time.perf_counter()
+            # Reset any chart from a previous turn so we only render a fresh one.
+            deps.figure_json = None
             sql_result, _ = run_agent_with_live_tools(
                 sql_agent,
                 refinement_data.refined_question,
@@ -281,6 +287,7 @@ def build_assistant_response(user_prompt: str, deps: Deps) -> dict:
             "success": sql_output.success,
             "explanation": sql_output.explanation,
             "sql_query": sql_output.sql_query,
+            "figure_json": deps.figure_json,
             "record": record,
         }
 

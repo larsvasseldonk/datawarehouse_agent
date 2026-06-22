@@ -25,6 +25,22 @@ When to call: After schema metadata has been retrieved and a candidate SQL query
 has been drafted.
 Inputs: `query` (DuckDB SQL string)
 Returns: the result rows as a string, or a `SQL Error: ...` message on failure.
+Side effect: caches the last result rows and column names in `Deps` so
+`create_plotly_visualisation` can chart them.
+
+## create_plotly_visualisation
+
+Description: Renders the most recent query result set as a Plotly chart (bar,
+line, or scatter) using the rows and column names cached by `execute_sql_query`,
+and stores the serialized figure in `Deps` for the Streamlit app to render.
+When to call: Only when BOTH conditions hold — the user explicitly asked for a
+visualisation (chart/graph/plot/trend/comparison) AND `execute_sql_query`
+returned a valid, non-empty result set. Never for a failed/empty query or an
+unrequested chart.
+Inputs: `chart_type` (`bar` | `line` | `scatter`), `x_column`, `y_column`
+(column names from the result set), and `title`.
+Returns: a short confirmation string; the serialized Plotly figure is written to
+`Deps.figure_json` and rendered in the chat alongside the text answer.
 
 ---
 
@@ -45,18 +61,6 @@ candidates (empty if no plausible match).
 Impact: highest-impact addition for the refinement agent — it grounds entity
 resolution in the data, reducing downstream SQL failures from invalid station
 filters.
-
-### create_plotly_visualisation (SQL agent)
-
-Description: Converts the result set of an executed query into a Plotly figure
-that can be rendered to the user (e.g. a time-series line chart of incidents per
-month, or a bar chart of incidents per station), instead of returning only a
-text answer.
-When to call: After `execute_sql_query` returns rows, when the question implies a
-trend or comparison that is clearer as a chart.
-Inputs: `rows`, `column_names`, and an inferred `chart_type` / axis mapping.
-Returns: a serialized Plotly figure spec (and/or a rendered chart in the
-Streamlit app) alongside the text answer.
 
 ### retrieve_sql_examples (SQL agent)
 
