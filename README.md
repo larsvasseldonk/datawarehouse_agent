@@ -8,6 +8,8 @@ SQL over a DuckDB star-schema warehouse — no SQL knowledge required from the u
 
 [▶️ Watch the demo video](docs/media/demo.mov)
 
+https://github.com/user-attachments/assets/9534b98f-0aab-442b-97e7-491813ba3e81
+
 > GitHub doesn't inline-play video from a relative repo path. To embed it as a
 > playable player, drag [docs/media/demo.mov](docs/media/demo.mov) into a new
 > issue/PR comment on GitHub, copy the generated `user-attachments` URL, and
