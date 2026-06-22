@@ -1,5 +1,5 @@
 [project]
-name = "relational-rag"
+name = "datawarehouse_agent"
 version = "0.1.0"
 description = "CLI natural-language interface for querying DuckDB using RAG-grounded SQL generation"
 readme = "README.md"

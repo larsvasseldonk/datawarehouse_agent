@@ -4,6 +4,15 @@ A two-agent GenAI assistant that answers natural-language questions about Dutch
 Railways (NS) station-safety incidents by generating, executing, and explaining
 SQL over a DuckDB star-schema warehouse — no SQL knowledge required from the user.
 
+## Demo
+
+[▶️ Watch the demo video](docs/media/demo.mov)
+
+> GitHub doesn't inline-play video from a relative repo path. To embed it as a
+> playable player, drag [docs/media/demo.mov](docs/media/demo.mov) into a new
+> issue/PR comment on GitHub, copy the generated `user-attachments` URL, and
+> paste it here.
+
 ## The Problem
 
 Station-safety and operations staff regularly need numbers from the incident
