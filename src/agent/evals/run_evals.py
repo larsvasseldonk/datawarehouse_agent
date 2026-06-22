@@ -1,113 +1,31 @@
-"""
-End-to-end evaluation pipeline.
+"""End-to-end eval orchestrator: generate -> judge -> report.
 
-Runs the two-agent pipeline (refinement + SQL) on a set of questions, applies
-both LLM judges to each interaction, and reports how many decisions are
-good/bad per agent in absolute numbers and as a percentage, with a cost/time
-breakdown. Judged results are saved to a timestamped JSON file.
+Runs the two-agent pipeline on a dataset, applies the relevant LLM judge(s),
+prints a good/bad + cost/time report, and saves all artifacts in one run
+directory. Optionally fails (exit code 1) when the good-rate drops below a
+threshold, so it can be used as a CI quality gate.
 
 Usage:
-    python -m src.agent.evals.run_evals                       # default questions_generated.csv
-    python -m src.agent.evals.run_evals --questions my.csv    # custom questions file
-    python -m src.agent.evals.run_evals --limit 10            # random subset of 10
+    python -m src.agent.evals.run_evals --dataset questions_sql.csv --target sql
+    python -m src.agent.evals.run_evals --dataset questions_manual.csv --min-good-rate 0.7
 """
 
-import os
-import json
-import time
-import random
-import asyncio
-import argparse
-from datetime import datetime
+from __future__ import annotations
 
-import pandas as pd
+import argparse
+import asyncio
+import sys
+import time
+
 from dotenv import load_dotenv
 
-from src.agent.evals.run_questions import (
-    run_pipeline_on_all_questions,
-    CostAccumulator,
-    cost_eur,
-    total_cost_eur,
-)
-from src.agent.evals.refinement_judge import (
-    create_refinement_judge,
-    format_refinement_prompt,
-    JUDGE_MODEL as REFINEMENT_JUDGE_MODEL,
-)
-from src.agent.evals.sql_judge import (
-    create_sql_judge,
-    format_sql_prompt,
-)
+from src.agent.evals.core.artifacts import new_run_dir, write_json
+from src.agent.evals.core.cost import CostAccumulator
+from src.agent.evals.core.metrics import count_good_bad, good_rate
+from src.agent.evals.judge_runner import judge_results
+from src.agent.evals.pipeline import load_dataset_rows, run_pipeline_on_all_questions
 
 load_dotenv()
-
-EVALS_DIR = os.path.dirname(__file__)
-
-
-# ---------------------------------------------------------------------------
-# Step 2 – apply both LLM judges
-# ---------------------------------------------------------------------------
-
-async def judge_all_results(
-    agent_results: list[dict],
-    judge_cost: CostAccumulator,
-) -> list[dict]:
-    refinement_judge = create_refinement_judge()
-    sql_judge = create_sql_judge()
-
-    judged = []
-    total = len(agent_results)
-
-    for i, entry in enumerate(agent_results, 1):
-        question = entry.get("input", {}).get("question", f"Question {i}")
-        record = {
-            "input": entry.get("input"),
-            "category": entry.get("category"),
-            "type": entry.get("type"),
-            "refinement": None,
-            "sql": None,
-        }
-
-        try:
-            ref_eval = await refinement_judge.run(format_refinement_prompt(entry))
-            judge_cost.add(ref_eval.usage)
-            record["refinement"] = {
-                "label": ref_eval.output.label,
-                "reasoning": ref_eval.output.reasoning,
-            }
-            ref_label = ref_eval.output.label
-        except Exception as exc:
-            record["refinement"] = {"label": "bad", "reasoning": f"Judge error: {exc}"}
-            ref_label = "error"
-
-        sql_label = "----"
-        if isinstance(entry.get("sql"), dict):
-            try:
-                sql_eval = await sql_judge.run(format_sql_prompt(entry))
-                judge_cost.add(sql_eval.usage)
-                record["sql"] = {
-                    "label": sql_eval.output.label,
-                    "reasoning": sql_eval.output.reasoning,
-                }
-                sql_label = sql_eval.output.label
-            except Exception as exc:
-                record["sql"] = {"label": "bad", "reasoning": f"Judge error: {exc}"}
-                sql_label = "error"
-
-        print(f"[{i}/{total}] refinement={ref_label:5} sql={sql_label:5} | {question}")
-        judged.append(record)
-
-    return judged
-
-
-# ---------------------------------------------------------------------------
-# Step 3 – report
-# ---------------------------------------------------------------------------
-
-def _counts(judged: list[dict], key: str) -> tuple[int, int, int]:
-    good = sum(1 for r in judged if r[key] and r[key]["label"] == "good")
-    bad = sum(1 for r in judged if r[key] and r[key]["label"] == "bad")
-    return good, bad, good + bad
 
 
 def _fmt_time(seconds: float) -> str:
@@ -115,129 +33,89 @@ def _fmt_time(seconds: float) -> str:
     return f"{m}m {s:02d}s" if m else f"{s}s"
 
 
-def report(
-    judged: list[dict],
-    agent_refinement_cost: CostAccumulator,
-    agent_sql_cost: CostAccumulator,
-    judge_cost: CostAccumulator,
-    agent_elapsed: float,
-    judge_elapsed: float,
-) -> None:
-    ref_good, ref_bad, ref_total = _counts(judged, "refinement")
-    sql_good, sql_bad, sql_total = _counts(judged, "sql")
-
-    agent_cost = total_cost_eur(agent_refinement_cost) + total_cost_eur(agent_sql_cost)
-    judge_total_cost = total_cost_eur(judge_cost)
-    total_cost = agent_cost + judge_total_cost
-    total_elapsed = agent_elapsed + judge_elapsed
+def report(judged: list[dict], agent_cost: float, judge_cost: float,
+           agent_elapsed: float, judge_elapsed: float) -> tuple[float, float]:
+    ref_good, ref_bad, ref_total = count_good_bad(judged, "refinement")
+    sql_good, sql_bad, sql_total = count_good_bad(judged, "sql")
 
     print("\n" + "=" * 55)
     print("  EVALUATION RESULTS")
     print("=" * 55)
     print(f"  Refinement judge ({ref_total} judged):")
     if ref_total:
-        print(f"    Good : {ref_good:>4}  ({ref_good / ref_total * 100:.1f}%)")
-        print(f"    Bad  : {ref_bad:>4}  ({ref_bad / ref_total * 100:.1f}%)")
+        print(f"    Good : {ref_good:>4}  ({good_rate(ref_good, ref_total) * 100:.1f}%)")
+        print(f"    Bad  : {ref_bad:>4}  ({good_rate(ref_bad, ref_total) * 100:.1f}%)")
     print(f"  SQL judge ({sql_total} judged):")
     if sql_total:
-        print(f"    Good : {sql_good:>4}  ({sql_good / sql_total * 100:.1f}%)")
-        print(f"    Bad  : {sql_bad:>4}  ({sql_bad / sql_total * 100:.1f}%)")
+        print(f"    Good : {sql_good:>4}  ({good_rate(sql_good, sql_total) * 100:.1f}%)")
+        print(f"    Bad  : {sql_bad:>4}  ({good_rate(sql_bad, sql_total) * 100:.1f}%)")
     print("=" * 55)
-    print("  COST & TIME BREAKDOWN")
+    print("  COST & TIME")
     print("=" * 55)
-    print(f"  Agents:")
-    print(f"    Cost          : €{agent_cost:.4f}")
-    print(f"    Time          : {_fmt_time(agent_elapsed)}")
-    print(f"  Judges ({judge_cost.model}):")
-    print(f"    Tokens in/out : {judge_cost.total_input_tokens:,} / {judge_cost.total_output_tokens:,}")
-    print(f"    Cost          : €{judge_total_cost:.4f}")
-    print(f"    Time          : {_fmt_time(judge_elapsed)}")
-    print(f"  {'-' * 37}")
-    print(f"  Total cost      : €{total_cost:.4f}")
-    print(f"  Total time      : {_fmt_time(total_elapsed)}")
+    print(f"  Agents cost : EUR{agent_cost:.4f}   time: {_fmt_time(agent_elapsed)}")
+    print(f"  Judges cost : EUR{judge_cost:.4f}   time: {_fmt_time(judge_elapsed)}")
+    print(f"  Total cost  : EUR{agent_cost + judge_cost:.4f}")
     print("=" * 55)
 
+    return good_rate(ref_good, ref_total), good_rate(sql_good, sql_total)
 
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
 
 async def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Run the two-agent pipeline on all questions and judge the responses."
-    )
-    parser.add_argument(
-        "--questions",
-        default="questions_generated.csv",
-        help="Path to a CSV file with a 'question' column (default: questions_generated.csv)",
-    )
-    parser.add_argument(
-        "--output",
-        default=None,
-        help="Optional path to save the judged results as JSON (default: timestamped file).",
-    )
-    parser.add_argument(
-        "--limit",
-        type=int,
-        default=None,
-        help="Run on a random subset of N questions instead of the full list.",
-    )
+    parser = argparse.ArgumentParser(description="Run the two-agent pipeline and judge it.")
+    parser.add_argument("--dataset", default="questions_sql.csv", help="Dataset CSV (in datasets/).")
+    parser.add_argument("--target", choices=["refinement", "sql", "both"], default="both",
+                        help="Which judge(s) to apply (default: both).")
+    parser.add_argument("--limit", type=int, default=None, help="Run a random subset of N questions.")
+    parser.add_argument("--min-good-rate", type=float, default=None,
+                        help="Fail (exit 1) if the judged good-rate is below this (CI gate).")
     args = parser.parse_args()
 
-    questions_path = args.questions
-    if not os.path.isabs(questions_path):
-        questions_path = os.path.join(EVALS_DIR, questions_path)
-
-    print(f"Loading questions from {questions_path}...")
-    df = pd.read_csv(questions_path)
-    category_col = "category" if "category" in df.columns else "group"
-
-    rows = list(zip(df["question"], df[category_col], df["type"]))
-    print(f"  -> {len(rows)} questions loaded.")
-
-    if args.limit is not None:
-        k = min(args.limit, len(rows))
-        rows = random.sample(rows, k)
-        print(f"  -> Sampling {k} random questions (--limit {args.limit}).")
-
-    questions = [r[0] for r in rows]
-    categories = [r[1] for r in rows]
-    types = [r[2] for r in rows]
-
-    # --- Phase 1: run the two-agent pipeline ---
-    print("\n" + "-" * 55)
-    print("  PHASE 1: Running refinement + SQL agents")
+    rows = load_dataset_rows(args.dataset, args.limit)
+    print("-" * 55)
+    print(f"  PHASE 1: agents on {len(rows)} questions from {args.dataset}")
     print("-" * 55)
     t0 = time.perf_counter()
-    agent_results, refinement_cost, sql_cost = await run_pipeline_on_all_questions(
-        questions, categories, types
-    )
+    results, refinement_cost, sql_cost = await run_pipeline_on_all_questions(rows)
     agent_elapsed = time.perf_counter() - t0
+    agent_cost = refinement_cost.total_cost_eur() + sql_cost.total_cost_eur()
 
-    # --- Phase 2: judge with both judges ---
     print("\n" + "-" * 55)
-    print("  PHASE 2: Applying LLM judges")
+    print("  PHASE 2: LLM judges")
     print("-" * 55)
-    judge_cost = CostAccumulator(model=REFINEMENT_JUDGE_MODEL)
+    judge_cost = CostAccumulator(model="gpt-4o-mini")
     t0 = time.perf_counter()
-    judged = await judge_all_results(agent_results, judge_cost)
+    judged = await judge_results(results, judge_cost, target=args.target)
     judge_elapsed = time.perf_counter() - t0
 
-    # --- Save judged results ---
-    if args.output:
-        output_path = args.output
-        if not os.path.isabs(output_path):
-            output_path = os.path.join(EVALS_DIR, output_path)
-    else:
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_path = os.path.join(EVALS_DIR, f"evals_run_{timestamp}.json")
+    run_dir = new_run_dir(args.dataset.replace(".csv", ""))
+    write_json(run_dir / "results.json", results)
+    write_json(run_dir / "judged.json", judged)
+    write_json(run_dir / "meta.json", {
+        "dataset": args.dataset,
+        "target": args.target,
+        "n_questions": len(rows),
+        "agent_cost_eur": agent_cost,
+        "judge_cost_eur": judge_cost.total_cost_eur(),
+    })
 
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(judged, f, indent=2, ensure_ascii=False)
-    print(f"\nJudged results saved to {output_path}")
+    ref_rate, sql_rate = report(
+        judged, agent_cost, judge_cost.total_cost_eur(), agent_elapsed, judge_elapsed
+    )
+    print(f"\nArtifacts saved to {run_dir}")
 
-    # --- Report ---
-    report(judged, refinement_cost, sql_cost, judge_cost, agent_elapsed, judge_elapsed)
+    if args.min_good_rate is not None:
+        rates = []
+        _, _, ref_total = count_good_bad(judged, "refinement")
+        _, _, sql_total = count_good_bad(judged, "sql")
+        if ref_total:
+            rates.append(ref_rate)
+        if sql_total:
+            rates.append(sql_rate)
+        worst = min(rates) if rates else 1.0
+        if worst < args.min_good_rate:
+            print(f"\nFAIL: good-rate {worst:.3f} < threshold {args.min_good_rate:.3f}")
+            sys.exit(1)
+        print(f"\nPASS: good-rate {worst:.3f} >= threshold {args.min_good_rate:.3f}")
 
 
 if __name__ == "__main__":

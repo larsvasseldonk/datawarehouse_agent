@@ -1,4 +1,4 @@
-question,group,type
+question,category,type
 Hoe veel incidenten?,in-scope,ambiguous
 Wat is het weer?,out-of-scope,no data
 Total amount of incidents at Veghel Centraal?,in-scope,happy-path

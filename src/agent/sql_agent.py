@@ -12,6 +12,7 @@ import os
 import duckdb
 import textwrap
 import logfire
+import plotly.graph_objects as go
 
 
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
@@ -31,6 +32,13 @@ class SQLAgentConfig:
 class Deps:
     conn: duckdb.DuckDBPyConnection = duckdb.connect(DB_PATH, read_only=True)
     cache_path: Path = ROOT_DIR / ".cache/db_metadata.json"
+    # Populated by execute_sql_query so create_plotly_visualisation can chart the
+    # last result set without the model having to re-transmit the rows.
+    last_rows: list | None = None
+    last_columns: list[str] | None = None
+    # Serialized Plotly figure (fig.to_json()) produced by the last successful
+    # create_plotly_visualisation call; the app reads this to render the chart.
+    figure_json: str | None = None
 
 
 class SQLResponse(BaseModel):
@@ -46,6 +54,7 @@ class SQLResponse(BaseModel):
     sql_query: str = Field(description="The SQL query that was run")
     success: bool = Field(description="Indicates whether the SQL query executed successfully without errors")
     explanation: str = Field(description="Explanation about how the SQL query was generated and executed")
+    visualisation_created: bool = Field(default=False, description="Indicates whether a Plotly visualisation was created for this answer")
 
 
 sql_config = SQLAgentConfig()
@@ -109,6 +118,7 @@ execute it, and return the answer.
 IMPORTANT BEHAVIOR:
 1. Always call `get_database_metadata` at the start of the conversation to understand the tables, comments, schemas, and relationships.
 2. Refer closely to the example queries below to understand patterns for naming conventions, join conditions, keys, and filter logic (e.g., handling locations like 'Ut' for Utrecht Centraal or handling dates/fact counting patterns).
+3. Only call `create_plotly_visualisation` when BOTH of these are true: the user explicitly asked for a visualisation (a chart, graph, plot, trend, or comparison), AND `execute_sql_query` returned a valid, non-empty result set. Never create a visualisation for a failed query, an empty result, or when the user did not ask for one. When you do create one, set `visualisation_created` to true in your final answer.
 
 ### REFERENCE SQL EXAMPLES:
 {get_sql_examples_str()}
@@ -206,10 +216,61 @@ def get_database_metadata(ctx: RunContext[Deps]) -> dict:
 def execute_sql_query(ctx: RunContext[Deps], query: str) -> str:
     """Executes a DuckDB SQL query and returns the rows as a string list."""
     try:
-        res = ctx.deps.conn.execute(query).fetchall()
+        cursor = ctx.deps.conn.execute(query)
+        res = cursor.fetchall()
+        # Cache the result set so create_plotly_visualisation can chart it.
+        ctx.deps.last_columns = [d[0] for d in cursor.description] if cursor.description else []
+        ctx.deps.last_rows = res
         return str(res)
     except Exception as e:
         return f"SQL Error: {e}"
+
+
+@sql_agent.tool
+def create_plotly_visualisation(
+    ctx: RunContext[Deps],
+    chart_type: str,
+    x_column: str,
+    y_column: str,
+    title: str,
+) -> str:
+    """Render the most recent query result set as a Plotly chart.
+
+    Only call this after `execute_sql_query` has returned a non-empty result set
+    and the user explicitly asked for a visualisation.
+
+    Args:
+        chart_type: One of "bar", "line", or "scatter".
+        x_column: Column name (from the query result) to use for the x-axis.
+        y_column: Column name (from the query result) to use for the y-axis.
+        title: A short, descriptive chart title.
+    """
+    rows = ctx.deps.last_rows
+    columns = ctx.deps.last_columns
+    if not rows or not columns:
+        return "No query results available to visualise. Run execute_sql_query first."
+
+    col_index = {name: i for i, name in enumerate(columns)}
+    if x_column not in col_index or y_column not in col_index:
+        return f"Unknown column(s). Available columns: {columns}"
+
+    x_vals = [row[col_index[x_column]] for row in rows]
+    y_vals = [row[col_index[y_column]] for row in rows]
+
+    chart = chart_type.strip().lower()
+    if chart == "bar":
+        trace = go.Bar(x=x_vals, y=y_vals)
+    elif chart == "line":
+        trace = go.Scatter(x=x_vals, y=y_vals, mode="lines+markers")
+    elif chart == "scatter":
+        trace = go.Scatter(x=x_vals, y=y_vals, mode="markers")
+    else:
+        return "Unsupported chart_type. Use one of: bar, line, scatter."
+
+    fig = go.Figure(data=[trace])
+    fig.update_layout(title=title, xaxis_title=x_column, yaxis_title=y_column)
+    ctx.deps.figure_json = fig.to_json()
+    return f"Created a {chart} chart titled '{title}'."
 
 
 if __name__ == "__main__":

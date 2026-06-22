@@ -84,6 +84,10 @@ You will assess the question for clarity, completeness, and data availability.
 If you can't extract all necessary information from the user's question, 
 ask clarifying or follow-up questions.
 
+If the user asks for a visualisation (a chart, graph, plot, trend, or comparison),
+preserve that request explicitly in the refined_question so the SQL agent can
+render it.
+
 ### AVAILABLE DATABASE TABLES:
 {table_availability_str.strip()}
 """.strip()
