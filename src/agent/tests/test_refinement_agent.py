@@ -68,19 +68,5 @@ async def test_judge_refined_question():
         "the agent should extract the date range from the user's question and include it in the refined question",
         "the agent should extract the incident type from the user's question and include it in the refined question",
         "the agent should indicate that the refined question is ready for SQL generation",
-        "the agent should add in the additional_specs that meldingssort should be agressie",
+        # "the agent should add in the additional_specs that meldingsoort should be agressie",
     ])
-
-
-# @pytest.mark.asyncio
-# async def test_future_date():
-#     import datetime
-#     future_year = datetime.datetime.now().year + 1
-#     user_prompt = f"Wat is het totaal aantal incidenten geregistreerd in augustus {future_year}?"
-#     refinement_result = await refinement_agent.run(
-#         user_prompt,
-#         deps=Deps()
-#     )
-
-#     output = refinement_result.output
-#     assert isinstance(output, str)

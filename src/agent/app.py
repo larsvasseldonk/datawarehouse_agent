@@ -13,11 +13,17 @@ import streamlit as st
 from dotenv import load_dotenv
 from pydantic_ai import FunctionToolCallEvent
 
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
+DB_PATH = ROOT_DIR / "db/db.duckdb"
+
+# Load environment variables (API keys) from the repo-root .env before importing
+# the agents, since the app is launched from src/agent (see Makefile) so a bare
+# load_dotenv() would not reliably find the .env at the project root.
+load_dotenv(ROOT_DIR / ".env")
+
 from refinement_agent import QuestionRefinementResponse, refinement_agent
 from sql_agent import Deps, sql_agent
 
-ROOT_DIR = Path(__file__).resolve().parent.parent.parent
-DB_PATH = ROOT_DIR / "db/db.duckdb"
 CACHE_PATH = ROOT_DIR / ".cache/db_metadata.json"
 FEEDBACK_PATH = Path(__file__).resolve().parent / "evals" / "feedback.json"
 
@@ -293,11 +299,11 @@ def build_assistant_response(user_prompt: str, deps: Deps) -> dict:
 
 
 def main() -> None:
-    load_dotenv()
+    load_dotenv(ROOT_DIR / ".env")
     init_logfire()
 
-    st.set_page_config(page_title="Relational RAG Multi-Agent", page_icon="🤖", layout="wide")
-    st.title("Relational RAG Multi-Agent")
+    st.set_page_config(page_title="Datawarehouse Agent", page_icon="🤖", layout="wide")
+    st.title("Datawarehouse Agent")
     st.caption("Refinement and SQL agents in one chat, with live tool-call visibility.")
 
     if not DB_PATH.exists():

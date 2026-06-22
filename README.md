@@ -1,4 +1,4 @@
-# Relational RAG: Natural-Language Q&A over a Railway Incident Warehouse
+# Datawarehouse Agent
 
 A two-agent GenAI assistant that answers natural-language questions about Dutch
 Railways (NS) station-safety incidents by generating, executing, and explaining
