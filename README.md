@@ -188,6 +188,11 @@ token in the environment and view runs at https://logfire.pydantic.dev. The
 Streamlit app additionally surfaces live tool calls per turn for in-session
 observability.
 
+The Streamlit chat also collects explicit user feedback on each answer (👍/👎
+plus an optional comment). Feedback is logged to Logfire and persisted to
+`src/agent/evals/feedback.json` alongside the question, refined question,
+generated SQL, and result for later analysis.
+
 ## Reproducibility
 
 The data is generated locally and deterministically by the seed scripts, so no
@@ -200,9 +205,10 @@ Planned improvements to strengthen quality, observability, and operations:
 
 ### Feedback-driven evaluation loop
 
-- Collect explicit user feedback in the Streamlit chat (e.g. 👍/👎 plus an
-  optional comment) on each answer, and log it alongside the question, refined
-  question, generated SQL, and result.
+User feedback is already collected in the Streamlit chat and stored in
+`src/agent/evals/feedback.json` (see Monitoring). The remaining work is to close
+the loop:
+
 - Feed thumbs-up interactions directly into the ground-truth dataset used by the
   evaluation harness (`src/agent/evals/`), so the verified-question set grows
   automatically from real usage and future eval runs reflect production traffic.
