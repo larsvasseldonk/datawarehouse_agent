@@ -69,7 +69,12 @@ src/
     refinement_agent.py # Stage 1: question refinement / clarification agent
     sql_agent.py        # Stage 2: SQL generation + execution agent (tools live here)
     llm.py, utils.py    # Shared helpers
-    evals/              # LLM-judge evaluation harness + ground-truth datasets
+    evals/              # LLM-judge evaluation
+      evals.py          # Run agents + judges on a dataset -> results.json, judged.json
+      align.py          # Compare LLM judges vs human labels (no LLM calls)
+      label_evals.py    # Streamlit tool to label results.json
+      judges/           # Refinement + SQL LLM-judge prompts/factories
+      datasets/         # Ground-truth question CSVs
     tests/              # Unit tests + judge utilities
   db/
     setup_db.py         # Builds and seeds the DuckDB warehouse
@@ -137,35 +142,41 @@ make test
 uv run pytest src/agent/tests
 ```
 
+The tests call the OpenAI API, so they need `OPENAI_API_KEY` and a built
+database (`make db`).
+
 ## Evaluation
 
-The agents are evaluated with an **LLM-as-judge** harness against ground-truth
-question sets in `src/agent/evals/`:
+The agents are evaluated with an **LLM-as-judge** approach over ground-truth
+question sets in `src/agent/evals/datasets/`:
 
-- `questions_manual.csv` — a **hand-crafted** set of in-scope, out-of-scope, and
-  adversarial ("drop all tables") questions with type labels.
-- `questions_generated.csv` — an LLM-generated set for broader coverage.
+- `questions_refinement.csv` — ambiguous, out-of-scope, edge-case, and
+  adversarial ("drop all tables") questions targeting the refinement agent.
+- `questions_sql.csv` — answerable and visualisation questions targeting the
+  SQL agent.
 
-Run the full pipeline + judges:
-
-```bash
-make eval
-# or
-uv run python -m src.agent.evals.run_evals --questions questions_manual.csv
-```
-
-This runs the refinement + SQL agents on every question, applies a refinement
-judge and a SQL judge, and reports good/bad rates with a cost/time breakdown.
-
-**Judge alignment (manual evaluation):** human labels in `human_labels.json` are
-compared against the LLM judges to measure judge accuracy/precision/recall:
+`evals.py` runs the refinement + SQL agents on a dataset, applies the relevant
+LLM judge(s), prints a good/bad + cost report, and writes `results.json` (agent
+outputs) and `judged.json` (outputs + judge labels):
 
 ```bash
-uv run python -m src.agent.evals.align_judges
+make eval-sql          # questions_sql.csv,        target=sql
+make eval-refinement   # questions_refinement.csv, target=refinement
+# or directly:
+uv run python -m src.agent.evals.evals \
+  --dataset questions_sql.csv --target sql [--limit N]
 ```
 
-A Streamlit labeling tool (`src/agent/evals/label_evals.py`) is provided to
-create and review the human labels.
+**Judge alignment (human labels):** `label_evals.py` is a Streamlit tool to
+manually label the responses in `results.json` (stored in `human_labels.json`,
+keyed by `"{agent}::{question}"`). `align.py` then compares those human labels
+against the LLM judges — with **no LLM calls** — and reports judge
+accuracy/precision/recall:
+
+```bash
+make label   # label results.json in the browser
+make align   # compare judged.json vs human_labels.json
+```
 
 ## Monitoring
 

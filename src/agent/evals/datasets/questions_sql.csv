@@ -1,0 +1,21 @@
+question,category,type
+Total amount of incidents at Almere Centrum?,in-scope,happy-path
+Hoe veel incidenten zijn er geregistreerd in augustus 2025 op station Utrecht Centraal?,in-scope,happy-path
+Welke meldingsoort heeft de meeste incidenten in augustus 2025 op station Utrecht Centraal?,in-scope,happy-path
+Geef de top 5 meest voorkomende meldingsoorten op Amsterdam Centraal.,in-scope,happy-path
+Top 3 stations met de meeste incidenten tijdens de spits?,in-scope,happy-path
+Aantal incidenten per station in 2025?,in-scope,varied phrasing
+Hoeveel meldingen van overlast in regio RSV Zuid in 2025?,in-scope,aggregated
+Wat is het percentage incidenten waarbij een medewerker letsel opliep in 2025?,in-scope,aggregated
+Welke meldingsoorten zijn er beschikbaar in de database?,in-scope,descriptive
+Wat is het drukste uurblok qua meldingen op een gemiddelde donderdag?,in-scope,trends
+Maak een lijngrafiek van het totaal aantal incidenten per maand in 2025.,in-scope,visualisation
+Visualiseer het aantal incidenten per station als staafdiagram.,in-scope,visualisation
+Toon een grafiek van de top 10 stations met de meeste incidenten in 2025.,in-scope,visualisation
+Plot de dagelijkse trend van incidenten op Utrecht Centraal in augustus 2025.,in-scope,visualisation
+Geef een staafdiagram van de top 5 meest voorkomende meldingsoorten.,in-scope,visualisation
+Visualiseer de maandelijkse verdeling van agressie-incidenten in 2025.,in-scope,visualisation
+Plot a bar chart of incidents per location type.,in-scope,visualisation
+Show a line chart of total incidents per quarter in 2025.,in-scope,visualisation
+Vergelijk in een staafdiagram de incidenten tussen Amsterdam Centraal en Rotterdam Centraal in 2025.,in-scope,visualisation
+Plot the trend of incidents during rush hour versus off-peak as a chart.,in-scope,visualisation
