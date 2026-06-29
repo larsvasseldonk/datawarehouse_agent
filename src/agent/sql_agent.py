@@ -3,10 +3,9 @@ from dataclasses import dataclass
 from pydantic_ai import Agent, RunContext
 from pydantic import BaseModel, Field
 
-from typing import Annotated
-from annotated_types import MinLen
-
 from pathlib import Path
+from src.agent.llm import LLMProvider
+
 import json
 import os
 import duckdb
@@ -60,7 +59,7 @@ class SQLResponse(BaseModel):
 sql_config = SQLAgentConfig()
 sql_agent = Agent(
     name=sql_config.name,
-    model="openai-chat:" + sql_config.model,
+    model=LLMProvider(sql_config.model).get_model(),
     deps_type=Deps, 
     output_type=SQLResponse,
 ) # type: ignore

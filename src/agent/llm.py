@@ -10,10 +10,19 @@ class LLMProvider:
     Provides methods to create and configure language models for the agent.
     """
 
-    def __init__(self, model_name: str = "gpt-4.1-mini"):
+    def __init__(self, model_name: str = "gpt-5-mini") -> None:
         self.model_name = model_name
 
-    def get_chatns_model(self):
+    def get_model(self, provider: str = "openai") -> OpenAIChatModel:
+        """
+        Returns a model for 'openai' or 'chatns'.
+        Defaults to the LLM_PROVIDER environment variable, then to 'openai'.
+        """
+        if provider == "chatns":
+            return self._get_chatns_model()
+        return self._get_openai_model()
+
+    def _get_chatns_model(self) -> OpenAIChatModel:
         """
         Creates and returns an OpenAIChatModel configured to use the ChatNS API.
         """
@@ -42,7 +51,7 @@ class LLMProvider:
 
         return model
 
-    def get_openai_model(self):
+    def _get_openai_model(self) -> OpenAIChatModel:
         """
         Creates and returns an OpenAIChatModel configured to use the OpenAI API.
         """

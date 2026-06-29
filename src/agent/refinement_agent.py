@@ -2,8 +2,10 @@ from dataclasses import dataclass
 from pydantic_ai import Agent, RunContext
 from pydantic import BaseModel, Field
 from pathlib import Path
+
+from src.agent.llm import LLMProvider
+
 import json
-import os
 import duckdb
 import logfire
 
@@ -49,7 +51,7 @@ class QuestionRefinementResponse(BaseModel):
 refinement_config = RefinementAgentConfig()
 refinement_agent = Agent(
     name=refinement_config.name,
-    model="openai-chat:" + refinement_config.model,
+    model=LLMProvider(refinement_config.model).get_model(),
     deps_type=Deps,
     output_type=[str, QuestionRefinementResponse],
 ) # type: ignore

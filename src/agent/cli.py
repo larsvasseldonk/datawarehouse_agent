@@ -7,12 +7,11 @@ ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 DB_PATH = ROOT_DIR / "db/db.duckdb"
 
 # Load environment variables (API keys) from the repo-root .env before importing
-# the agents, since the CLI is launched from src/agent (see Makefile) and the
-# agents resolve their OpenAI model at import time.
+# the agents, since the agents resolve their OpenAI model at import time.
 load_dotenv(ROOT_DIR / ".env")
 
-from refinement_agent import refinement_agent, QuestionRefinementResponse
-from sql_agent import sql_agent, Deps
+from src.agent.refinement_agent import refinement_agent, QuestionRefinementResponse
+from src.agent.sql_agent import sql_agent, Deps
 
 
 def main():

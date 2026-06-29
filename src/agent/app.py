@@ -17,12 +17,11 @@ ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 DB_PATH = ROOT_DIR / "db/db.duckdb"
 
 # Load environment variables (API keys) from the repo-root .env before importing
-# the agents, since the app is launched from src/agent (see Makefile) so a bare
-# load_dotenv() would not reliably find the .env at the project root.
+# the agents, since they resolve their OpenAI model at import time.
 load_dotenv(ROOT_DIR / ".env")
 
-from refinement_agent import QuestionRefinementResponse, refinement_agent
-from sql_agent import Deps, sql_agent
+from src.agent.refinement_agent import QuestionRefinementResponse, refinement_agent
+from src.agent.sql_agent import Deps, sql_agent
 
 CACHE_PATH = ROOT_DIR / ".cache/db_metadata.json"
 FEEDBACK_PATH = Path(__file__).resolve().parent / "evals" / "feedback.json"

@@ -4,10 +4,10 @@ db:
 	uv run python -m src.db.setup_db
 
 app:
-	cd src/agent && uv run streamlit run app.py
+	uv run python -m streamlit run src/agent/app.py
 
 cli:
-	cd src/agent && uv run python cli.py
+	uv run python -m src.agent.cli
 
 test:
 	uv run pytest src/agent/tests
