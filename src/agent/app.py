@@ -20,20 +20,32 @@ DB_PATH = ROOT_DIR / "db/db.duckdb"
 # the agents, since they resolve their OpenAI model at import time.
 load_dotenv(ROOT_DIR / ".env")
 
-from src.agent.refinement_agent import QuestionRefinementResponse, refinement_agent
-from src.agent.sql_agent import Deps, sql_agent
+from src.agent.refinement_agent import (
+    QuestionRefinementResponse,
+    refinement_agent,
+    refinement_config,
+)
+from src.agent.sql_agent import Deps, sql_agent, sql_config
 
 CACHE_PATH = ROOT_DIR / ".cache/db_metadata.json"
 FEEDBACK_PATH = Path(__file__).resolve().parent / "evals" / "data" / "user_feedback.json"
 
-# USD to EUR exchange rate, matching the evals pipeline (run_questions.py).
+# USD to EUR exchange rate, matching the evals pipeline (run.py).
 USD_TO_EUR = 0.87
 
+# Model pricing per 1M tokens in USD, as (input, output).
+MODEL_PRICES_USD = {
+    "gpt-4o-mini": (0.15, 0.60),
+    "gpt-4.1-mini": (0.40, 1.60),
+    "gpt-5-mini": (0.25, 2.00),
+}
 
-def cost_eur(input_tokens: int, output_tokens: int) -> float:
-    """Cost in EUR for a single request (gpt-4o-mini pricing), as in the evals."""
-    input_cost = (input_tokens / 1_000_000) * 0.15
-    output_cost = (output_tokens / 1_000_000) * 0.60
+
+def cost_eur(model: str, input_tokens: int, output_tokens: int) -> float:
+    """Cost in EUR for a single request, based on the model's token pricing."""
+    input_price, output_price = MODEL_PRICES_USD.get(model, MODEL_PRICES_USD["gpt-4o-mini"])
+    input_cost = (input_tokens / 1_000_000) * input_price
+    output_cost = (output_tokens / 1_000_000) * output_price
     return (input_cost + output_cost) * USD_TO_EUR
 
 
@@ -56,6 +68,8 @@ def init_session_state() -> None:
         st.session_state.chat_messages = []
     if "feedback_records" not in st.session_state:
         st.session_state.feedback_records = {}
+    if "total_cost_eur" not in st.session_state:
+        st.session_state.total_cost_eur = 0.0
 
 
 
@@ -219,7 +233,7 @@ def build_assistant_response(user_prompt: str, deps: Deps) -> dict:
         is_refined = isinstance(refinement_result.output, QuestionRefinementResponse)
         ref_in = refinement_result.usage.input_tokens or 0
         ref_out = refinement_result.usage.output_tokens or 0
-        ref_cost = cost_eur(ref_in, ref_out)
+        ref_cost = cost_eur(refinement_config.model, ref_in, ref_out)
 
         record["refinement"] = (
             refinement_result.output.model_dump()
@@ -270,7 +284,7 @@ def build_assistant_response(user_prompt: str, deps: Deps) -> dict:
 
         sql_in = sql_result.usage.input_tokens or 0
         sql_out = sql_result.usage.output_tokens or 0
-        sql_run_cost = cost_eur(sql_in, sql_out)
+        sql_run_cost = cost_eur(sql_config.model, sql_in, sql_out)
 
         record["sql"] = sql_output.model_dump()
         record["tools_sql"] = collect_tool_calls(sql_result)
@@ -298,7 +312,6 @@ def build_assistant_response(user_prompt: str, deps: Deps) -> dict:
 
 
 def main() -> None:
-    load_dotenv(ROOT_DIR / ".env")
     init_logfire()
 
     st.set_page_config(page_title="Datawarehouse Agent", page_icon="🤖", layout="wide")
@@ -317,10 +330,13 @@ def main() -> None:
 
     with st.sidebar:
         st.subheader("Session")
+        st.metric("Total cost", f"€{st.session_state.total_cost_eur:.4f}")
         if st.button("Clear conversation"):
             st.session_state.refinement_history = []
             st.session_state.sql_history = []
             st.session_state.chat_messages = []
+            st.session_state.feedback_records = {}
+            st.session_state.total_cost_eur = 0.0
             st.rerun()
 
     render_chat_history()
@@ -349,6 +365,9 @@ def main() -> None:
             }
             st.error(message["content"])
 
+    record = message.get("record")
+    if isinstance(record, dict):
+        st.session_state.total_cost_eur += record.get("cost_eur", 0.0)
     st.session_state.chat_messages.append(message)
     st.rerun()
 
