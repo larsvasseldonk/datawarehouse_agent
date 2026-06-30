@@ -24,7 +24,7 @@ from src.agent.refinement_agent import QuestionRefinementResponse, refinement_ag
 from src.agent.sql_agent import Deps, sql_agent
 
 CACHE_PATH = ROOT_DIR / ".cache/db_metadata.json"
-FEEDBACK_PATH = Path(__file__).resolve().parent / "evals" / "feedback.json"
+FEEDBACK_PATH = Path(__file__).resolve().parent / "evals" / "data" / "user_feedback.json"
 
 # USD to EUR exchange rate, matching the evals pipeline (run_questions.py).
 USD_TO_EUR = 0.87
@@ -101,7 +101,7 @@ def run_agent_with_live_tools(agent, prompt: str, message_history, deps: Deps, p
 
 
 def persist_feedback() -> None:
-    """Write all collected feedback records to feedback.json (results.json shape)."""
+    """Write all collected feedback records to user_feedback.json (results.json shape)."""
     records = list(st.session_state.feedback_records.values())
     FEEDBACK_PATH.parent.mkdir(parents=True, exist_ok=True)
     FEEDBACK_PATH.write_text(

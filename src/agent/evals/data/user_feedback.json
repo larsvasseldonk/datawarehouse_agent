@@ -1,0 +1,35 @@
+[
+  {
+    "input": {
+      "question": "hoe veel incidenten?"
+    },
+    "refinement": {
+      "clarification": "Je vraag is niet specifiek genoeg om een antwoord te genereren. Kun je meer details geven over de tijdsperiode waar je naar wilt kijken (bijvoorbeeld specifieke datums of een datumrange)? En wil je de incidenten gespecificeerd per station of type incident?"
+    },
+    "tools_refinement": [],
+    "refinement_time_s": 1.601775707968045,
+    "refinement_cost_eur": 0.00011144699999999999,
+    "refinement_tokens": {
+      "input": 634,
+      "output": 55
+    },
+    "sql": null,
+    "tools_sql": [],
+    "sql_time_s": 0.0,
+    "sql_cost_eur": 0.0,
+    "sql_tokens": {
+      "input": 0,
+      "output": 0
+    },
+    "execution_time_s": 1.601775707968045,
+    "cost_eur": 0.00011144699999999999,
+    "tokens": {
+      "input": 634,
+      "output": 55
+    },
+    "feedback": {
+      "rating": "up",
+      "comment": ""
+    }
+  }
+]

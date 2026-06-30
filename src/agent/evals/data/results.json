@@ -1,0 +1,162 @@
+[
+  {
+    "input": {
+      "question": "Hoe veel incidenten?"
+    },
+    "category": "in-scope",
+    "type": "ambiguous",
+    "refinement": {
+      "clarification": "Uw vraag is niet specifiek genoeg om een antwoord te genereren. Kunt u alstublieft verduidelijken:\n\n1. Over welke tijdsperiode wilt u de incidenten weten? (bijvoorbeeld specifieke datum of een datumbereik)\n2. Wilt u het aantal incidenten voor een specifieke locatie of voor alle locaties?\n3. Heeft u specifieke types of categorieën van incidenten in gedachten?\n\nMet deze informatie kan ik uw vraag beter verfijnen."
+    },
+    "sql": null,
+    "tools_refinement": [],
+    "tools_sql": [],
+    "refinement_judge": {
+      "label": "good",
+      "reasoning": "The user's question, \"Hoe veel incidenten?\" (How many incidents?), is clearly ambiguous as it lacks crucial information such as the time period, location, or incident type. The expected behavior is that the agent should recognize the ambiguity and ask for clarification, which is exactly what the agent did. The agent's output is a polite and relevant request for additional details regarding time frame, specific location(s), and types of incidents. This enables the agent to refine the question properly for the SQL agent later. The agent also did not attempt to hand off this ambiguous question to the SQL agent, which is correct. The response is fully in Dutch, matching the language of the user query. Therefore, the routing decision is appropriate and meets the expected behavior for an ambiguous in-scope question."
+    },
+    "sql_judge": null
+  },
+  {
+    "input": {
+      "question": "Incidenten per dag?"
+    },
+    "category": "in-scope",
+    "type": "ambiguous",
+    "refinement": {
+      "clarification": "Could you please specify the date range for which you would like to retrieve the incidents per day? Additionally, would you like to filter the data by any specific stations or types of incidents?"
+    },
+    "sql": null,
+    "tools_refinement": [],
+    "tools_sql": [],
+    "refinement_judge": {
+      "label": "good",
+      "reasoning": "The user question \"Incidenten per dag?\" is ambiguous because it lacks critical details such as the date range and any specific filters like station or incident type. The refinement agent correctly identifies this ambiguity and asks for clarification on the date range and possible filters. This aligns well with the expected behavior categorized as ambiguous. The agent neither hands off prematurely nor refuses outright, but instead seeks more information to create a clear and answerable question. The response is in Dutch, matching the user's language. Therefore, the agent's routing decision is appropriate and correct."
+    },
+    "sql_judge": null
+  },
+  {
+    "input": {
+      "question": "Total amount of incidents at Almere Centrum?"
+    },
+    "category": "in-scope",
+    "type": "happy-path",
+    "refinement": null,
+    "sql": {
+      "answer": "A total of 10 incidents have been registered at Almere Centrum.",
+      "answer_found": true,
+      "refined_question": "Total amount of incidents at Almere Centrum?",
+      "sql_query": "SELECT d_drp.dienstregelpunt_naam, SUM(f_inc.aantal_incident) AS incident_count\nFROM factincidentmkns f_inc\nINNER JOIN dimdienstregelpunt d_drp ON f_inc.dimdienstregelpuntkey_station = d_drp.dimdienstregelpuntkey\nWHERE d_drp.dienstregelpunt_naam = 'Almere Centrum'\nGROUP BY d_drp.dienstregelpunt_naam;",
+      "success": true,
+      "explanation": "The query aggregates the total number of incidents recorded at Almere Centrum by joining the incident fact table with the service point dimension table on the appropriate keys and filtering for the specific station name.",
+      "visualisation_created": false
+    },
+    "tools_refinement": [],
+    "tools_sql": [
+      {
+        "name": "get_database_metadata",
+        "args": "{}"
+      },
+      {
+        "name": "execute_sql_query",
+        "args": "{\"query\":\"SELECT d_drp.dienstregelpunt_naam, SUM(f_inc.aantal_incident) AS incident_count\\nFROM factincidentmkns f_inc\\nINNER JOIN dimdienstregelpunt d_drp ON f_inc.dimdienstregelpuntkey_station = d_drp.dimdienstregelpuntkey\\nWHERE d_drp.dienstregelpunt_naam = 'Almere Centrum'\\nGROUP BY d_drp.dienstregelpunt_naam;\"}"
+      }
+    ],
+    "refinement_judge": null,
+    "sql_judge": {
+      "label": "good",
+      "reasoning": "The SQL query appears to be valid against the schema provided. It correctly joins the fact table 'factincidentmkns' with the dimension table 'dimdienstregelpunt' using the appropriate keys. The query filters for the station 'Almere Centrum' and correctly aggregates the total number of incidents using the SUM function, grouping by the station name. The agent's answer states that 10 incidents were registered at Almere Centrum, which aligns with the executed query's intent to calculate this total. The status indicates that an answer was found successfully, which supports the credibility of the agent's response. Since all components of the evaluation (SQL structure, query logic, and the language of the answer) match the requirements, the overall assessment is positive."
+    },
+    "sql_feedback": {
+      "agree": true,
+      "note": ""
+    }
+  },
+  {
+    "input": {
+      "question": "Hoe veel incidenten zijn er geregistreerd in augustus 2025 op station Utrecht Centraal?"
+    },
+    "category": "in-scope",
+    "type": "happy-path",
+    "refinement": null,
+    "sql": {
+      "answer": "Er zijn geen incidenten geregistreerd in augustus 2025 op station Utrecht Centraal.",
+      "answer_found": false,
+      "refined_question": "Hoe veel incidenten zijn er geregistreerd in augustus 2025 op station Utrecht Centraal?",
+      "sql_query": "SELECT d_drp.dienstregelpunt_naam, SUM(f_inc.aantal_incident) AS incident_count\nFROM factincidentmkns f_inc\nINNER JOIN dimdatum d_dtm ON f_inc.dimdatumkey = d_dtm.dimdatumkey\nINNER JOIN dimdienstregelpunt d_drp ON f_inc.dimdienstregelpuntkey_station = d_drp.dimdienstregelpuntkey\nWHERE d_drp.dienstregelpunt_code = 'Ut' AND d_dtm.datum BETWEEN '2025-08-01' AND '2025-08-31'\nGROUP BY d_drp.dienstregelpunt_naam;",
+      "success": true,
+      "explanation": "Het SQL-query is succesvol uitgevoerd, maar het resultaat is leeg, wat betekent dat er geen geregistreerde incidenten zijn voor deze periode en locatie.",
+      "visualisation_created": false
+    },
+    "tools_refinement": [],
+    "tools_sql": [
+      {
+        "name": "get_database_metadata",
+        "args": "{}"
+      },
+      {
+        "name": "execute_sql_query",
+        "args": "{\"query\":\"SELECT d_drp.dienstregelpunt_naam, SUM(f_inc.aantal_incident) AS incident_count\\nFROM factincidentmkns f_inc\\nINNER JOIN dimdatum d_dtm ON f_inc.dimdatumkey = d_dtm.dimdatumkey\\nINNER JOIN dimdienstregelpunt d_drp ON f_inc.dimdienstregelpuntkey_station = d_drp.dimdienstregelpuntkey\\nWHERE d_drp.dienstregelpunt_code = 'Ut' AND d_dtm.datum BETWEEN '2025-08-01' AND '2025-08-31'\\nGROUP BY d_drp.dienstregelpunt_naam;\"}"
+      }
+    ],
+    "refinement_judge": null,
+    "sql_judge": {
+      "label": "good",
+      "reasoning": "The SQL query correctly joins the relevant tables: factincidentmkns, dimdatum, and dimdienstregelpunt. It filters for incidents at the station code 'Ut', which corresponds to Utrecht Centraal, and it checks for incidents occurring in August 2025 by using a date range from '2025-08-01' to '2025-08-31'. The GROUP BY clause is appropriately used to aggregate the results by the station name. However, the query execution returned a status of 'answer_found=False', indicating it found no incidents matching the criteria. The agent's conclusion is consistent with this result, stating that there are no recorded incidents at Utrecht Centraal in August 2025. There are no hallucinated values or incorrect references, and the answer is clear and in Dutch, matching the question. Therefore, the evaluation is positive. Overall, the SQL is valid, and the answer reflects the SQL's results accurately."
+    }
+  },
+  {
+    "input": {
+      "question": "Zijn er veel incidenten in het weekend?"
+    },
+    "category": "in-scope",
+    "type": "ambiguous",
+    "refinement": {
+      "clarification": "Om uw vraag te verfijnen en beter te begrijpen, heb ik enkele aanvullende details nodig:\n\n1. Wat beschouwt u als \"veel\" incidenten? Gaat het om een specifiek aantal of percentage ten opzichte van andere dagen?\n2. Wilt u een vergelijking van incidenten per dag in het weekend versus door de week, of alleen een totaal aantal incidenten in het weekend?\n3. Heeft u specifieke data of een datumbereik waarin u geïnteresseerd bent? \n\nMet deze informatie kan ik een meer gerichte vraag formuleren voor de SQL-query."
+    },
+    "sql": null,
+    "tools_refinement": [],
+    "tools_sql": [],
+    "refinement_judge": {
+      "label": "good",
+      "reasoning": "The user's question is whether there are many incidents in the weekend. This question is ambiguous because \"veel\" (many) is subjective and relative, and the question lacks a specific time frame or comparison baseline. The refinement agent does not proceed to hand off the question for SQL querying but instead asks relevant clarifying questions: defining \"veel,\" specifying whether a comparison is desired (weekend vs weekdays), and asking for a date range. This properly addresses the ambiguity before formulating a structured query. The response is in Dutch, matching the user's language. Therefore, the refinement agent behavior aligns well with the expected behavior for ambiguous questions in-scope, by seeking clarifications rather than making assumptions or refusing outright."
+    },
+    "sql_judge": null
+  },
+  {
+    "input": {
+      "question": "Welke stations zijn het onveiligst?"
+    },
+    "category": "in-scope",
+    "type": "ambiguous",
+    "refinement": {
+      "clarification": "Om deze vraag nauwkeurig te beantwoorden, heb ik meer informatie nodig. Kunt u specificeren over welke periode u de gegevens wilt hebben? Daarnaast, wilt u de onveiligheid definiëren aan de hand van het aantal incidenten, soort incidenten, of een andere maatstaf?"
+    },
+    "sql": null,
+    "tools_refinement": [],
+    "tools_sql": [],
+    "refinement_judge": {
+      "label": "good",
+      "reasoning": "The user's question \"Welke stations zijn het onveiligst?\" is indeed ambiguous as it lacks specification of the time period and the criteria for defining \"onveiligst\" (most unsafe). The refinement agent correctly identified this ambiguity and did not prematurely hand off the question for SQL processing. Instead, it sought clarifying information by asking the user to specify the time range and the metric for safety (number of incidents, type of incidents, or another measure). This aligns perfectly with the expected behavior for questions that are ambiguous in the given context. Furthermore, the response is in Dutch, matching the language of the user question. Therefore, the agent's decision to ask for clarification rather than attempting a premature answer is appropriate and good."
+    },
+    "sql_judge": null
+  },
+  {
+    "input": {
+      "question": "Hoeveel incidenten vonden plaats in de maand februari 2026?"
+    },
+    "category": "edge-case",
+    "type": "out of date range bounds",
+    "refinement": {
+      "clarification": "Je vraag bevat een datumbereik, maar het is niet gespecificeerd in het formaat dat nodig is voor de SQL-query. Daarnaast is het belangrijk om te weten of je geïnteresseerd bent in incidenten voor specifieke stations of dat alle stations in aanmerking komen. \n\nKun je bevestigen of je alle stations wilt meenemen, of zijn er specifieke stations die je wilt filteren?"
+    },
+    "sql": null,
+    "tools_refinement": [],
+    "tools_sql": [],
+    "refinement_judge": {
+      "label": "bad",
+      "reasoning": "The user's question asks about the number of incidents in February 2026. Since the data likely has a time range limitation and February 2026 may be outside of the available data range, it may be unanswerable. The refinement agent did not immediately refuse or give the correct refusal reasoning about the date being out of range. Instead, it asked a clarifying question about whether all stations or specific stations should be considered. However, the question already contains a clear time range (February 2026) and the only potential ambiguity is here about stations, but this is minor compared to the date being out of range. The best approach would be to check if the date range is valid or refuse outright if 2026 is not covered. Since the agent did not refuse despite the question being about a likely out-of-range date, and it introduced an unnecessary ambiguity about stations, this is suboptimal. Therefore, the agent's routing decision is not fully correct since the main issue of date range out of bounds is ignored and it fails to refuse accordingly."
+    },
+    "sql_judge": null
+  }
+]

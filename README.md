@@ -79,11 +79,10 @@ src/
     sql_agent.py        # Stage 2: SQL generation + execution agent (tools live here)
     llm.py, utils.py    # Shared helpers
     evals/              # LLM-judge evaluation
-      evals.py          # Run agents + judges on a dataset -> results.json, judged.json
-      align.py          # Compare LLM judges vs human labels (no LLM calls)
-      label_evals.py    # Streamlit tool to label results.json
-      judges/           # Refinement + SQL LLM-judge prompts/factories
-      datasets/         # Ground-truth question CSVs
+      run.py            # Run agents + judges on a dataset -> data/results.json + score
+      app.py            # Streamlit app to review judge labels and give feedback
+      judges.py         # Refinement + SQL LLM-judge prompts/factories
+      data/             # Question CSVs + results.json
     tests/              # Unit tests + judge utilities
   db/
     setup_db.py         # Builds and seeds the DuckDB warehouse
@@ -156,36 +155,34 @@ database (`make db`).
 
 ## Evaluation
 
-The agents are evaluated with an **LLM-as-judge** approach over ground-truth
-question sets in `src/agent/evals/datasets/`:
+The agents are evaluated with an **LLM-as-judge** approach over question sets in
+`src/agent/evals/data/`:
 
 - `questions_refinement.csv` — ambiguous, out-of-scope, edge-case, and
   adversarial ("drop all tables") questions targeting the refinement agent.
 - `questions_sql.csv` — answerable and visualisation questions targeting the
   SQL agent.
 
-`evals.py` runs the refinement + SQL agents on a dataset, applies the relevant
-LLM judge(s), prints a good/bad + cost report, and writes `results.json` (agent
-outputs) and `judged.json` (outputs + judge labels):
+`run.py` runs the refinement + SQL agents on a dataset, applies the relevant
+LLM judge(s), prints a good/bad score per agent, and writes `data/results.json`
+(agent outputs + judge labels). Token usage is traced with Logfire.
 
 ```bash
 make eval-sql          # questions_sql.csv,        target=sql
 make eval-refinement   # questions_refinement.csv, target=refinement
 # or directly:
-uv run python -m src.agent.evals.evals \
+uv run python -m src.agent.evals.run \
   --dataset questions_sql.csv --target sql [--limit N]
 ```
 
-**Judge alignment (human labels):** `label_evals.py` is a Streamlit tool to
-manually label the responses in `results.json` (stored in `human_labels.json`,
-keyed by `"{agent}::{question}"`). `align.py` then compares those human labels
-against the LLM judges — with **no LLM calls** — and reports judge
-accuracy/precision/recall:
+**Review the judge:** `app.py` is a Streamlit app to review each judge label
+alongside the agent output, agree/disagree with the judge, and add notes.
+Feedback is written back into `data/results.json` and logged to Logfire.
 
 ```bash
-make label   # label results.json in the browser
-make align   # compare judged.json vs human_labels.json
+make eval-app   # review judge labels in the browser
 ```
+
 
 ## Monitoring
 
@@ -199,7 +196,7 @@ observability.
 
 The Streamlit chat also collects explicit user feedback on each answer (👍/👎
 plus an optional comment). Feedback is logged to Logfire and persisted to
-`src/agent/evals/feedback.json` alongside the question, refined question,
+`src/agent/evals/data/user_feedback.json` alongside the question, refined question,
 generated SQL, and result for later analysis.
 
 ## Reproducibility
@@ -215,7 +212,7 @@ Planned improvements to strengthen quality, observability, and operations:
 ### Feedback-driven evaluation loop
 
 User feedback is already collected in the Streamlit chat and stored in
-`src/agent/evals/feedback.json` (see Monitoring). The remaining work is to close
+`src/agent/evals/data/user_feedback.json` (see Monitoring). The remaining work is to close
 the loop:
 
 - Feed thumbs-up interactions directly into the ground-truth dataset used by the

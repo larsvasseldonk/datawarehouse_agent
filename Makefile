@@ -1,4 +1,4 @@
-.PHONY: db app cli test eval-refinement eval-sql align label
+.PHONY: db app cli test eval-refinement eval-sql eval-app
 
 db:
 	uv run python -m src.db.setup_db
@@ -14,19 +14,13 @@ test:
 
 # --- Evaluation ---
 
-# Run the agents + LLM judges on a dataset -> results.json + judged.json.
+# Run the agents + LLM judges on a dataset -> data/results.json + score.
 eval-refinement:
-	uv run python -m src.agent.evals.evals --dataset questions_refinement.csv --target refinement
+	uv run python -m src.agent.evals.run --dataset questions_refinement.csv --target refinement
 
 eval-sql:
-	uv run python -m src.agent.evals.evals --dataset questions_sql.csv --target sql
+	uv run python -m src.agent.evals.run --dataset questions_sql.csv --target sql
 
-# Compare the LLM judges against human labels (no LLM calls).
-align:
-	uv run python -m src.agent.evals.align
-
-# Streamlit tool to manually label results.json.
-label:
-	cd src/agent/evals && uv run streamlit run label_evals.py
-
-
+# Streamlit app to review judge labels and give feedback.
+eval-app:
+	uv run streamlit run src/agent/evals/app.py
