@@ -1,11 +1,11 @@
 from dataclasses import dataclass
-from typing import Any, Dict
+from typing import Any
 
 
 @dataclass
 class ToolCall:
     name: str
-    args: Dict[str, Any]
+    args: dict[str, Any]
 
 
 def collect_tools(messages):
@@ -24,9 +24,3 @@ def collect_tools(messages):
             tool_calls.append(ToolCall(p.tool_name, p.args))
 
     return tool_calls
-
-
-def get_model_name(agent):
-    provider = agent.model.system
-    model_name = agent.model.model_name
-    return f"{provider}:{model_name}"

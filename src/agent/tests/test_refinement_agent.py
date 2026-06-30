@@ -1,5 +1,3 @@
-# uv run pytest test_agent.py -s
-
 import pytest
 
 from src.agent.refinement_agent import (
@@ -68,5 +66,4 @@ async def test_judge_refined_question():
         "the agent should extract the date range from the user's question and include it in the refined question",
         "the agent should extract the incident type from the user's question and include it in the refined question",
         "the agent should indicate that the refined question is ready for SQL generation",
-        # "the agent should add in the additional_specs that meldingsoort should be agressie",
     ])

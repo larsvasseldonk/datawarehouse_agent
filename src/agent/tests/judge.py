@@ -1,11 +1,11 @@
 from pydantic import BaseModel, Field
 from pydantic_ai import Agent 
 
-from src.agent.tests.utils import collect_tools, get_model_name
-from src.agent.tests.cost_tracker import capture_usage
+from src.agent.llm import LLMProvider
+from src.agent.tests.utils import collect_tools
 
 
-judge_instructions = f"""
+judge_instructions = """
 You are an expert judge evaluating the performance of an
 AI agent.
 """.strip()
@@ -40,7 +40,7 @@ class JudgeFeedback(BaseModel):
 def create_judge_agent():
     agent = Agent(
         name="judge",
-        model="openai-chat:gpt-4o-mini",
+        model=LLMProvider("gpt-4o-mini").get_model(),
         instructions=judge_instructions,
         output_type=JudgeFeedback
     )
@@ -77,12 +77,7 @@ async def assert_criteria(result, criteria):
         tool_calls='\n'.join([str(tc) for tc in tool_calls])
     )
 
-    print(judge_user_prompt)
-
     judge_result = await judge_agent.run(judge_user_prompt)
-
-    model = get_model_name(judge_agent)
-    capture_usage(model, judge_result)
 
     print("Judge feedback:")
     print(judge_result.output.feedback)
